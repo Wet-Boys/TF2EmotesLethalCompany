@@ -26,7 +26,6 @@ namespace TitanFall2Emotes
             BoneMapper joinerMapper = bodyObject.GetComponentInChildren<BoneMapper>();
             GameObject hostBodyObject = GetNetworkObject(secondaryNetId).gameObject;
             BoneMapper hostJoinerMapper = hostBodyObject.GetComponentInChildren<BoneMapper>();
-            GameObject g;
             bool joinerPlayer = bodyObject.GetComponents<PlayerControllerB>().Length == 1;
             bool hostPlayer = hostBodyObject.GetComponents<PlayerControllerB>().Length == 1;
             switch (name)
@@ -66,7 +65,24 @@ namespace TitanFall2Emotes
         [ServerRpc(RequireOwnership = false)]
         public void SyncEmoteToServerRpc(ulong netId, string name, int spot, ulong secondaryNetId)
         {
-            SyncEmoteToClientRpc(netId, name, spot, secondaryNetId);
+            GameObject bodyObject = GetNetworkObject(netId).gameObject;
+            BoneMapper joinerMapper = bodyObject.GetComponentInChildren<BoneMapper>();
+            GameObject hostBodyObject = GetNetworkObject(secondaryNetId).gameObject;
+            BoneMapper hostJoinerMapper = hostBodyObject.GetComponentInChildren<BoneMapper>();
+            bool joinerPlayer = bodyObject.GetComponents<PlayerControllerB>().Length == 1;
+            bool hostPlayer = hostBodyObject.GetComponents<PlayerControllerB>().Length == 1;
+            switch (name)
+            {
+                case "RPS_Join":
+                    RockPaperScissors.RPSJoin(joinerMapper, spot, hostJoinerMapper);
+                    break;
+                case "Flip_Join":
+                    Flip.Flip_Join(joinerMapper, spot, hostJoinerMapper);
+                    break;
+                default:
+                    SyncEmoteToClientRpc(netId, name, spot, secondaryNetId);
+                    break;
+            }
         }
     }
 }

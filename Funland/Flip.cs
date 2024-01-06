@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace TitanFall2Emotes
@@ -55,6 +57,14 @@ namespace TitanFall2Emotes
             g.transform.localEulerAngles = joinerMapper.transform.eulerAngles;
             g.transform.localScale = Vector3.one;
             joinerMapper.AssignParentGameObject(g, true, true, true, true, false);
+        }
+        public static void Flip_Join(BoneMapper joinerMapper, int spot, BoneMapper hostJoinerMapper)
+        {
+            int hostSpot = hostJoinerMapper.props[0].GetComponent<Flip>().charType;
+            int clientSpot = spot;
+
+            TF2Networker.instance.SyncEmoteToClientRpc(hostJoinerMapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId, "Flip_Throw", hostSpot, hostJoinerMapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId);
+            TF2Networker.instance.SyncEmoteToClientRpc(joinerMapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId, "Flip_Flip", clientSpot, hostJoinerMapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId);
         }
     }
 }

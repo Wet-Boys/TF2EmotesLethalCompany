@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace TitanFall2Emotes
@@ -127,6 +129,42 @@ namespace TitanFall2Emotes
             joinerMapper.props[prop1].transform.localEulerAngles = Vector3.zero;
             joinerMapper.props[prop1].transform.localPosition = new Vector3(0, 2.5f * joinerMapper.props[prop1].transform.lossyScale.y, 0);
             joinerMapper.ScaleProps();
+        }
+        public static void RPSJoin(BoneMapper joinerMapper, int spot, BoneMapper hostJoinerMapper)
+        {
+            int winner = UnityEngine.Random.Range(0, 2);
+            int hostSpot = UnityEngine.Random.Range(0, 3);
+            int clientSpot;
+            if (winner == 0)
+            {
+                clientSpot = hostSpot - 1;
+            }
+            else
+            {
+                clientSpot = hostSpot + 1;
+            }
+            if (clientSpot > 2)
+            {
+                clientSpot -= 3;
+            }
+            if (clientSpot < 0)
+            {
+                clientSpot += 3;
+            }
+
+            hostSpot += hostJoinerMapper.props[0].GetComponent<RockPaperScissors>().charType * 3;
+            clientSpot += spot * 3;
+
+            if (winner == 0)
+            {
+                TF2Networker.instance.SyncEmoteToClientRpc(hostJoinerMapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId, "RPS_Win", hostSpot, hostJoinerMapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId);
+                TF2Networker.instance.SyncEmoteToClientRpc(joinerMapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId, "RPS_Loss", clientSpot, hostJoinerMapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId);
+            }
+            else
+            {
+                TF2Networker.instance.SyncEmoteToClientRpc(hostJoinerMapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId, "RPS_Loss", hostSpot, hostJoinerMapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId);
+                TF2Networker.instance.SyncEmoteToClientRpc(joinerMapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId, "RPS_Win", clientSpot, hostJoinerMapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId);
+            }
         }
     }
 }
