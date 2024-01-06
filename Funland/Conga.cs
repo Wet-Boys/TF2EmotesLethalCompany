@@ -49,17 +49,7 @@ namespace TitanFall2Emotes
             }
             g.AddComponent<Conga>().akSound = aksound;
             joinerMapper.props.Add(g);
-            joinerMapper.SetAutoWalk(.2f, true);
-        }
-        void Start()
-        {
-            //TODO
-            //AkSoundEngine.PostEvent(akSound, this.gameObject);
-        }
-        void OnDestroy()
-        {
-            //TODO
-            //AkSoundEngine.StopAll(this.gameObject);
+            joinerMapper.SetAutoWalk(.2f, false);
         }
     }
 }

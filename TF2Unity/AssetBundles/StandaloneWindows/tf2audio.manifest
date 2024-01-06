@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2979040718
+CRC: 837200372
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f31f364231d4942dd0a0c98c4da0ef01
+    Hash: 32882062a9dd52fe0f34353172664378
   TypeTreeHash:
     serializedVersion: 2
     Hash: 9a2ca7bdbd1871f7131daf57de908e0c
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: f31f364231d4942dd0a0c98c4da0ef01
+    Hash: 32882062a9dd52fe0f34353172664378
 HashAppended: 0
 ClassTypes:
 - Class: 83
@@ -479,7 +479,7 @@ Assets:
 - Assets/Audio Dump/Eng_taunt_exert_47.ogg
 - Assets/Audio Dump/Heavy_taunt_exert_13.ogg
 - Assets/Audio Dump/Taunt_demo_int_19.ogg
-- Assets/Audio Dump/Scout_taunt_flip_int_03.ogg
+- Assets/Audio Dump/taunt_hard_clap1.ogg
 - Assets/Audio Dump/Eng_taunt_flip_exert_24.ogg
 - Assets/Audio Dump/Spy_taunt_flip_exert_08.ogg
 - Assets/Audio Dump/Eng_taunt_flip_admire_10.ogg
@@ -491,8 +491,9 @@ Assets:
 - Assets/Audio Dump/Sniper_taunt_admire_01.ogg
 - Assets/Audio Dump/Eng_taunt_flip_end_01.ogg
 - Assets/Audio Dump/Scout_taunt_conga_fun_06.ogg
-- Assets/Audio Dump/Soldier_taunt_flip_end_16.ogg
+- Assets/Audio Dump/Scout_taunt_flip_int_03.ogg
 - Assets/Audio Dump/Soldier_taunt_admire_04.ogg
+- Assets/Audio Dump/Soldier_taunt_flip_end_16.ogg
 - Assets/Audio Dump/Heavy_taunt_flip_fail_18.ogg
 - Assets/Audio Dump/Heavy_taunt_flip_int_16.ogg
 - Assets/Audio Dump/Eng_taunt_cong_fun_08.ogg

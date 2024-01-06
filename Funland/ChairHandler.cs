@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using TitanFall2Emotes.IMissWwise;
 using UnityEngine;
 
 namespace TitanFall2Emotes
@@ -40,16 +41,14 @@ namespace TitanFall2Emotes
                         mapper.preserveProps = true;
                         DebugClass.Log($"burp");
                         mapper.PlayAnim("engiRanchoBurp", 0);
-                        //TODO
-                        //AkSoundEngine.PostEvent("Play_RanchoBurp", mapper.gameObject);
+                        AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, TF2Plugin.Instance._play_ranchoburp, mapper);
                         break;
                     case 1:
                         mapper.preserveParent = true;
                         mapper.preserveProps = true;
                         DebugClass.Log($"bigDrink");
                         mapper.PlayAnim("engiRanchoBigDrink", 0);
-                        //TODO
-                        //AkSoundEngine.PostEvent("Play_RanchoLong", mapper.gameObject);
+                        AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, TF2Plugin.Instance._play_rancholong, mapper);
                         GetComponentInChildren<Animator>().SetBool("BigDrink", true);
                         break;
                     case 2:
@@ -57,8 +56,7 @@ namespace TitanFall2Emotes
                         mapper.preserveProps = true;
                         DebugClass.Log($"quickDrink");
                         mapper.PlayAnim("engiRanchoQuickDrink", 0);
-                        //TODO
-                        //AkSoundEngine.PostEvent("Play_RanchoQuick", mapper.gameObject);
+                        AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, TF2Plugin.Instance._play_ranchoquick, mapper);
                         GetComponentInChildren<Animator>().SetBool("SmallDrink", true);
                         break;
                     default:
@@ -80,9 +78,8 @@ namespace TitanFall2Emotes
                 gameObject.transform.localEulerAngles = rot;
                 gameObject.transform.localScale = scal;
                 scal *= 1.333f;
-                //TODO
-                //AkSoundEngine.PostEvent("Stop_Rancho", mapper.gameObject);
-                //AkSoundEngine.PostEvent("Play_RanchoClose", gameObject);
+                TF2Plugin.Instance.StopAudioContainerStuff(mapper);
+                AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, TF2Plugin.Instance._play_ranchoclose, mapper);
             }
             if (check3)
             {

@@ -10,7 +10,7 @@ namespace TitanFall2Emotes
         public static void StartKazotsky(BoneMapper joinerMapper, int spot)
         {
             joinerMapper.PlayAnim(TF2Plugin.KazotskyKick_Emotes[spot], 0);
-            //joinerMapper.SetAutoWalk(2f, true, false);
+            joinerMapper.SetAutoWalk(.2f, true);
         }
     }
 }

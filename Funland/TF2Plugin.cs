@@ -89,7 +89,7 @@ namespace TitanFall2Emotes
                         }
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                 }
             }
@@ -147,15 +147,53 @@ namespace TitanFall2Emotes
         //    }
         //    return thing;
         //}
-        internal int _conga, _conga_demo, _conga_engi, _conga_heavy, _conga_medic, _conga_pyro, _conga_scout, _conga_sniper, _conga_soldier, _conga_spy, _demo_flip_flip, _demo_flip_throw, _demo_flip_waiting, _demo_laugh, _engi_flip_flip, _engi_flip_throw, _engi_flip_waiting, _engi_laugh, _heavy_flip_flip, _heavy_flip_throw, _heavy_flip_waiting, _heavy_laugh, _kazotsky, _medic_flip_flip, _medic_flip_throw, _medic_flip_waiting, _medic_laugh, _play_rancho, _play_ranchoburp, _play_ranchoclose, _play_rancholong, _play_ranchoquick, _pyro_flip_flip, _pyro_flip_throw, _pyro_flip_waiting, _pyro_laugh, _rps_demo_initiate, _rps_demo_loss, _rps_demo_winpaper, _rps_demo_winrock, _rps_demo_winscissors, _rps_engi_initiate, _rps_engi_loss, _rps_engi_winpaper, _rps_engi_winrock, _rps_engi_winscissors, _rps_heavy_initiate, _rps_heavy_loss, _rps_heavy_winpaper, _rps_heavy_winrock, _rps_heavy_winscissors, _rps_medic_initiate, _rps_medic_loss, _rps_medic_winpaper, _rps_medic_winrock, _rps_medic_winscissors, _rps_pyro_initiate, _rps_pyro_loss, _rps_pyro_winpaper, _rps_pyro_winrock, _rps_pyro_winscissors, _rps_scout_initiate, _rps_scout_loss, _rps_scout_lossrock, _rps_scout_winpaper, _rps_scout_winrock, _rps_scout_winscissors, _rps_sniper_loss, _rps_sniper_winpaper, _rps_sniper_winrock, _rps_sniper_winscissors, _rps_sniper_initiate, _rps_soldier_initiate, _rps_soldier_loss, _rps_soldier_winpaper, _rps_soldier_winrock, _rps_soldier_winscissors, _rps_spy_initiate, _rps_spy_losspaper, _rps_spy_lossrock, _rps_spy_lossscissors, _rps_spy_winpaper, _rps_spy_winrock, _rps_spy_winscissors, _scout_flip_flip, _scout_flip_throw, _scout_flip_waiting, _sniper_flip_flip, _sniper_flip_throw, _sniper_flip_waiting, _soldier_flip_flip, _soldier_flip_throw, _soldier_flip_waiting, _spy_flip_flip, _spy_flip_throw, _spy_flip_waiting, _spy_laugh;
+        internal int _conga, _conga_demo_start, _conga_engi_start, _conga_heavy_start, _conga_medic_start, _conga_pyro_start, _conga_scout_start, _conga_sniper_start, _conga_soldier_start, _conga_spy_start, _conga_demo_loop, _conga_engi_loop, _conga_heavy_loop, _conga_medic_loop, _conga_pyro_loop, _conga_scout_loop, _conga_sniper_loop, _conga_soldier_loop, _conga_spy_loop, _demo_flip_flip, _demo_flip_throw, _demo_flip_waiting, _demo_laugh, _engi_flip_flip, _engi_flip_throw, _engi_flip_waiting, _engi_laugh, _heavy_flip_flip, _heavy_flip_throw, _heavy_flip_waiting, _heavy_laugh, _kazotsky, _medic_flip_flip, _medic_flip_throw, _medic_flip_waiting, _medic_laugh, _play_rancho, _play_ranchoburp, _play_ranchoclose, _play_rancholong, _play_ranchoquick, _pyro_flip_flip, _pyro_flip_throw, _pyro_flip_waiting, _pyro_laugh, _rps_demo_initiate, _rps_demo_loss, _rps_demo_winpaper, _rps_demo_winrock, _rps_demo_winscissors, _rps_engi_initiate, _rps_engi_loss, _rps_engi_winpaper, _rps_engi_winrock, _rps_engi_winscissors, _rps_heavy_initiate, _rps_heavy_loss, _rps_heavy_winpaper, _rps_heavy_winrock, _rps_heavy_winscissors, _rps_medic_initiate, _rps_medic_loss, _rps_medic_winpaper, _rps_medic_winrock, _rps_medic_winscissors, _rps_pyro_initiate, _rps_pyro_loss, _rps_pyro_winpaper, _rps_pyro_winrock, _rps_pyro_winscissors, _rps_scout_initiate, _rps_scout_loss, _rps_scout_lossrock, _rps_scout_winpaper, _rps_scout_winrock, _rps_scout_winscissors, _rps_sniper_loss, _rps_sniper_winpaper, _rps_sniper_winrock, _rps_sniper_winscissors, _rps_sniper_initiate_start, _rps_sniper_initiate_loop, _rps_soldier_initiate, _rps_soldier_loss, _rps_soldier_winpaper, _rps_soldier_winrock, _rps_soldier_winscissors, _rps_spy_initiate, _rps_spy_windup1, _rps_spy_windup2, _rps_spy_windup3, _rps_spy_losspaper, _rps_spy_lossrock, _rps_spy_lossscissors, _rps_spy_winpaper, _rps_spy_winrock, _rps_spy_winscissors, _scout_flip_flip, _scout_flip_throw, _scout_flip_waiting, _sniper_flip_flip, _sniper_flip_throw, _sniper_flip_waiting, _soldier_flip_flip, _soldier_flip_throw, _soldier_flip_waiting, _spy_flip_flip, _spy_flip_throw, _spy_flip_waiting, _spy_laugh;
         public void RegisterAllSounds()
         {
-            //            _conga_demo = RegiserSound([[""]], [0]);
+            ////////////////////////////Rancho
+            _play_rancho = RegisterSound([["RanchoOpen"]], [1.5f], 0);
+            _play_ranchoburp = RegisterSound([["RanchoBurp"]], [1.5f], 0);
+            _play_ranchoclose = RegisterSound([["RanchoClose"]], [0], 0);
+            _play_rancholong = RegisterSound([["RanchoDrink1"]], [2], 0);
+            _play_ranchoquick = RegisterSound([["RanchoDrink2"]], [.7f], 0);
 
-            //todo come back to conga and kazotsky, probably just play these on the character themselves?
-            //todo come back to rancho
-            //_conga = RegiserSound([["conga"]], [0]);
-            //_conga_demo = RegiserSound([[""]], [0]);
+            /////////////////////////////Conga
+            _conga_demo_start = RegisterSound([["Taunt_demo_conga_int_01", "Taunt_demo_conga_int_02", "Taunt_demo_conga_int_04", "Taunt_demo_conga_int_05", "Taunt_demo_conga_int_06", "Taunt_demo_conga_int_07"]], [0], 0);
+            _conga_demo_loop = RegisterSound([["Taunt_demo_conga_fun_08", "Taunt_demo_conga_fun_10", "Taunt_demo_conga_fun_11", "Taunt_demo_conga_fun_12", "Taunt_demo_conga_fun_18", "Taunt_demo_conga_fun_19", "Taunt_demo_conga_fun_24"]], [3], 3);
+
+            _conga_engi_start = RegisterSound([["Eng_taunt_cong_fun_02", "Eng_taunt_cong_fun_04", "Eng_taunt_cong_fun_08", "Eng_taunt_cong_fun_09", "Eng_taunt_cong_fun_10", "Eng_taunt_cong_fun_13", "Eng_taunt_cong_fun_14", "Eng_taunt_cong_fun_16", "Eng_taunt_cong_fun_20", "Eng_taunt_cong_fun_26", "Eng_taunt_cong_fun_30", "Eng_taunt_cong_fun_33", "Eng_taunt_cong_fun_34", "Eng_taunt_cong_fun_35", "Eng_taunt_cong_fun_36", "Eng_taunt_cong_fun_42"]], [0], 0);
+            _conga_engi_loop = RegisterSound([["Eng_taunt_cong_fun_02", "Eng_taunt_cong_fun_04", "Eng_taunt_cong_fun_08", "Eng_taunt_cong_fun_09", "Eng_taunt_cong_fun_10", "Eng_taunt_cong_fun_13", "Eng_taunt_cong_fun_14", "Eng_taunt_cong_fun_16", "Eng_taunt_cong_fun_20", "Eng_taunt_cong_fun_26", "Eng_taunt_cong_fun_30", "Eng_taunt_cong_fun_33", "Eng_taunt_cong_fun_34", "Eng_taunt_cong_fun_35", "Eng_taunt_cong_fun_36", "Eng_taunt_cong_fun_42"]], [3], 3);
+
+            _conga_heavy_start = RegisterSound([["Heavy_taunt_cong_int_11", "Heavy_taunt_cong_int_08", "Heavy_taunt_cong_int_12", "Heavy_taunt_cong_int_13"]], [0], 0);
+            _conga_heavy_loop = RegisterSound([["Heavy_taunt_cong_fun_01", "Heavy_taunt_cong_fun_11", "Heavy_taunt_cong_fun_12", "Heavy_taunt_cong_fun_19", "Heavy_taunt_cong_fun_20", "Heavy_taunt_cong_int_07", "Heavy_taunt_cong_int_09"]], [3], 3);
+
+            _conga_medic_start = RegisterSound([["Medic_taunt_cong_fun_01", "Medic_taunt_cong_fun_06", "Medic_taunt_cong_fun_07", "Medic_taunt_cong_fun_08", "Medic_taunt_cong_fun_09", "Medic_taunt_cong_fun_12", "Medic_taunt_cong_fun_15"]], [0], 0);
+            _conga_medic_loop = RegisterSound([["Medic_taunt_cong_fun_01", "Medic_taunt_cong_fun_06", "Medic_taunt_cong_fun_07", "Medic_taunt_cong_fun_08", "Medic_taunt_cong_fun_09", "Medic_taunt_cong_fun_12", "Medic_taunt_cong_fun_15"]], [3], 3);
+
+            _conga_pyro_start = RegisterSound([["Pyro_taunt_cong_fun_05", "Pyro_taunt_cong_fun_08", "Pyro_taunt_cong_fun_09", "Pyro_taunt_cong_fun_10", "Pyro_taunt_cong_fun_11", "Pyro_taunt_cong_fun_12", "Pyro_taunt_cong_fun_13", "Pyro_taunt_cong_fun_14"]], [0], 0);
+            _conga_pyro_loop = RegisterSound([["Pyro_taunt_cong_fun_05", "Pyro_taunt_cong_fun_08", "Pyro_taunt_cong_fun_09", "Pyro_taunt_cong_fun_10", "Pyro_taunt_cong_fun_11", "Pyro_taunt_cong_fun_12", "Pyro_taunt_cong_fun_13", "Pyro_taunt_cong_fun_14"]], [3], 3);
+
+            _conga_scout_start = RegisterSound([["Scout_taunt_conga_int_02", "Scout_taunt_conga_int_03", "Scout_taunt_conga_int_10"]], [0], 0);
+            _conga_scout_loop = RegisterSound([["Scout_taunt_conga_fun_01", "Scout_taunt_conga_fun_02", "Scout_taunt_conga_fun_05", "Scout_taunt_conga_fun_06", "Scout_taunt_conga_fun_07", "Scout_taunt_conga_fun_08", "Scout_taunt_conga_fun_09", "Scout_taunt_conga_fun_11", "Scout_taunt_conga_fun_12", "Scout_taunt_conga_fun_14"]], [3], 3);
+
+            _conga_sniper_start = RegisterSound([["Sniper_taunt_cong_fun_02", "Sniper_taunt_cong_fun_03", "Sniper_taunt_cong_fun_25", "Sniper_taunt_cong_int_03"]], [0], 0);
+            _conga_sniper_loop = RegisterSound([["Sniper_taunt_cong_fun_01", "Sniper_taunt_cong_fun_04", "Sniper_taunt_cong_fun_05", "Sniper_taunt_cong_fun_06", "Sniper_taunt_cong_fun_10", "Sniper_taunt_cong_fun_11", "Sniper_taunt_cong_fun_12", "Sniper_taunt_cong_fun_17", "Sniper_taunt_cong_fun_18", "Sniper_taunt_cong_fun_24", "Sniper_taunt_cong_int_01", "Sniper_taunt_cong_int_02"]], [3], 3);
+
+            _conga_soldier_start = RegisterSound([["Soldier_taunt_cong_int_03", "Soldier_taunt_cong_int_04", "Soldier_taunt_cong_int_13"]], [0], 0);
+            _conga_soldier_loop = RegisterSound([["Soldier_taunt_admire_22", "Soldier_taunt_cong_fun_01", "Soldier_taunt_cong_fun_04", "Soldier_taunt_cong_fun_08", "Soldier_taunt_cong_fun_11", "Soldier_taunt_cong_fun_24", "Soldier_taunt_cong_fun_27", "Soldier_taunt_cong_fun_29"]], [3], 3);
+
+            _conga_spy_start = RegisterSound([["Spy_taunt_cong_int_01", "Spy_taunt_cong_int_05", "Spy_taunt_cong_int_11"]], [0], 0);
+            _conga_spy_loop = RegisterSound([["Spy_taunt_cong_fun_01", "Spy_taunt_cong_fun_02", "Spy_taunt_cong_fun_03", "Spy_taunt_cong_fun_05", "Spy_taunt_cong_fun_06", "Spy_taunt_cong_fun_08", "Spy_taunt_cong_fun_09", "Spy_taunt_cong_fun_10", "Spy_taunt_cong_fun_14", "Spy_taunt_cong_fun_15", "Spy_taunt_cong_fun_17"]], [3], 3);
+
+
+
+
+            ////////////////////////Kazotsky
+
+
+
+
+
 
 
             ///////////////////////////////Flip
@@ -172,10 +210,10 @@ namespace TitanFall2Emotes
             _heavy_flip_waiting = RegisterSound([["Heavy_taunt_flip_int_01", "Heavy_taunt_flip_int_02", "Heavy_taunt_flip_int_04", "Heavy_taunt_flip_int_05", "Heavy_taunt_flip_int_10", "Heavy_taunt_flip_int_11", "Heavy_taunt_flip_int_12", "Heavy_taunt_flip_int_13", "Heavy_taunt_flip_int_16"]], [0f], 3);
 
             _medic_flip_flip = RegisterSound([["Medic_taunt_admire_01", "Medic_taunt_admire_02", "Medic_taunt_admire_03", "Medic_taunt_admire_07", "Medic_taunt_admire_10", "Medic_taunt_admire_13", "Medic_taunt_admire_14", "Medic_taunt_admire_22", "Medic_taunt_flip_end_01", "Medic_taunt_flip_end_02", "Medic_taunt_flip_end_05", "Medic_taunt_flip_end_06", "Medic_taunt_flip_end_08", "Medic_taunt_flip_end_09"]], [2.6f], 0);
-            _medic_flip_throw = RegisterSound([["Medic_taunt_exert_01", "Medic_taunt_exert_02", "Medic_taunt_exert_08", "Medic_taunt_exert_09", "Medic_taunt_flip_exert_01", "Medic_taunt_flip_exert_03", "Medic_taunt_flip_exert_04", "Medic_taunt_flip_exert_05", "Medic_taunt_flip_exert_06", "Medic_taunt_flip_exert_07", "Medic_taunt_flip_exert_08", "Medic_taunt_flip_exert_09", "Medic_taunt_flip_exert_10", ""]], [.6f], 0);
+            _medic_flip_throw = RegisterSound([["Medic_taunt_exert_01", "Medic_taunt_exert_02", "Medic_taunt_exert_08", "Medic_taunt_exert_09", "Medic_taunt_flip_exert_01", "Medic_taunt_flip_exert_03", "Medic_taunt_flip_exert_04", "Medic_taunt_flip_exert_05", "Medic_taunt_flip_exert_06", "Medic_taunt_flip_exert_07", "Medic_taunt_flip_exert_08", "Medic_taunt_flip_exert_09", "Medic_taunt_flip_exert_10"]], [.6f], 0);
             _medic_flip_waiting = RegisterSound([["Medic_taunt_flip_int_05", "Medic_taunt_flip_int_08", "Medic_taunt_flip_int_10", "Medic_taunt_flip_int_12", "Medic_taunt_flip_int_15"]], [0], 3);
 
-            _pyro_flip_flip = RegisterSound([["Pyro_taunt_flip_fun_01", "Pyro_taunt_flip_fun_04", "Pyro_taunt_flip_fun_05", "Pyro_taunt_flip_fun_06", "Pyro_taunt_flip_fun_09", "Pyro_taunt_flip_fun_10", "Pyro_taunt_flip_fun_11"], ["Pyro_taunt_flip_admire_01", "Pyro_taunt_flip_admire_02", "Pyro_taunt_flip_admire_03", "Pyro_taunt_flip_admire_05", "Pyro_taunt_flip_admire_06", "Pyro_taunt_thanks_07", "Pyro_taunt_thanks_08", "Pyro_taunt_thanks_09", ""]], [1.2f, 2.2f], 0);
+            _pyro_flip_flip = RegisterSound([["Pyro_taunt_flip_fun_01", "Pyro_taunt_flip_fun_04", "Pyro_taunt_flip_fun_05", "Pyro_taunt_flip_fun_06", "Pyro_taunt_flip_fun_09", "Pyro_taunt_flip_fun_10", "Pyro_taunt_flip_fun_11"], ["Pyro_taunt_flip_admire_01", "Pyro_taunt_flip_admire_02", "Pyro_taunt_flip_admire_03", "Pyro_taunt_flip_admire_05", "Pyro_taunt_flip_admire_06", "Pyro_taunt_thanks_07", "Pyro_taunt_thanks_08", "Pyro_taunt_thanks_09"]], [1.2f, 2.2f], 0);
             _pyro_flip_throw = RegisterSound([["Pyro_taunt_exert_12", "Pyro_taunt_flip_exert_02", "Pyro_taunt_flip_exert_04", "Pyro_taunt_flip_exert_05", "Pyro_taunt_flip_exert_06"]], [.6f], 0);
             _pyro_flip_waiting = RegisterSound([["Pyro_taunt_flip_int_02", "Pyro_taunt_flip_int_05", "Pyro_taunt_flip_int_07"]], [0], 3);
 
@@ -184,7 +222,7 @@ namespace TitanFall2Emotes
             _scout_flip_waiting = RegisterSound([["Scout_taunt_flip_int_03", "Scout_taunt_flip_int_06", "Scout_taunt_flip_int_07", "Scout_taunt_flip_int_10", "Scout_taunt_flip_int_12", "Scout_taunt_flip_int_13", "Scout_taunt_int_01", "Scout_taunt_int_03", "Scout_taunt_int_05", "Scout_taunt_int_06", "Scout_taunt_int_07", "Scout_taunt_int_08", "Scout_taunt_int_12", "Scout_taunt_int_14", "Scout_taunt_int_17", "Scout_taunt_int_18"]], [0], 3);
 
             _sniper_flip_flip = RegisterSound([["Sniper_taunt_admire_01", "Sniper_taunt_admire_02", "Sniper_taunt_admire_06", "Sniper_taunt_admire_09", "Sniper_taunt_admire_11", "Sniper_taunt_admire_12", "Sniper_taunt_admire_15", "Sniper_taunt_admire_16", "Sniper_taunt_admire_18", "Sniper_taunt_admire_19", "Sniper_taunt_admire_20", "Sniper_taunt_flip_end_02", "Sniper_taunt_flip_end_03", "Sniper_taunt_flip_end_04", "Sniper_taunt_flip_end_06", "Sniper_taunt_flip_end_07", "Sniper_taunt_flip_fun_05", "Sniper_taunt_flip_fun_06"]], [2.2f], 0);
-            _sniper_flip_throw = RegisterSound([["Sniper_taunt_exert_03", "Sniper_taunt_exert_07", "Sniper_taunt_exert_010", "Sniper_taunt_exert_15", "Sniper_taunt_flip_exert_01", "Sniper_taunt_flip_exert_04", "Sniper_taunt_flip_exert_05", "Sniper_taunt_flip_exert_06", "Sniper_taunt_flip_exert_07"]], [.6f], 0);
+            _sniper_flip_throw = RegisterSound([["Sniper_taunt_exert_03", "Sniper_taunt_exert_07", "Sniper_taunt_exert_10", "Sniper_taunt_exert_15", "Sniper_taunt_flip_exert_01", "Sniper_taunt_flip_exert_04", "Sniper_taunt_flip_exert_05", "Sniper_taunt_flip_exert_06", "Sniper_taunt_flip_exert_07"]], [.6f], 0);
             _sniper_flip_waiting = RegisterSound([["Sniper_taunt_flip_int_04", "Sniper_taunt_flip_int_06", "Sniper_taunt_flip_int_07", "Sniper_taunt_flip_int_10", "Sniper_taunt_flip_int_11", "Sniper_taunt_int_01", "Sniper_taunt_int_13"]], [0], 3);
 
             _soldier_flip_flip = RegisterSound([["Soldier_taunt_flip_fun_04", "Soldier_taunt_flip_fun_06", "Soldier_taunt_flip_fun_08"], ["Soldier_taunt_admire_01", "Soldier_taunt_admire_04", "Soldier_taunt_admire_09", "Soldier_taunt_admire_10", "Soldier_taunt_admire_16", "Soldier_taunt_admire_17", "Soldier_taunt_admire_18", "Soldier_taunt_admire_22", "Soldier_taunt_admire_24", "Soldier_taunt_admire_26", "Soldier_taunt_flip_end_01", "Soldier_taunt_flip_end_02", "Soldier_taunt_flip_end_03", "Soldier_taunt_flip_end_05", "Soldier_taunt_flip_end_15", "Soldier_taunt_flip_end_16", "Soldier_taunt_flip_end_17"]], [1.2f, 2.2f], 0);
@@ -198,76 +236,66 @@ namespace TitanFall2Emotes
 
 
             ///////////////////////////RPS
-            _rps_demo_initiate = RegisterSound([["Taunt_demo_rps_int_01", "Taunt_demo_rps_int_06"]], [0], 5);
+            _rps_demo_initiate = RegisterSound([["Taunt_demo_rps_int_01", "Taunt_demo_rps_int_06"]], [0], 3);
             _rps_demo_loss = RegisterSound([["Taunt_demo_rps_lose_04", "Taunt_demo_rps_lose_06", "Taunt_demo_rps_lose_08", "Taunt_demo_rps_lose_09", "Taunt_demo_rps_lose_10"], ["Taunt_demo_rps_exert_04"]], [5.5f, 1.7f], 0);
             _rps_demo_winpaper = RegisterSound([["Taunt_demo_rps_win_03", "Taunt_demo_rps_win_04", "Taunt_demo_rps_win_06", "Taunt_demo_rps_win_08", "Taunt_demo_rps_win_16", "Taunt_demo_rps_win_24", "Taunt_demo_rps_win_25", "Taunt_demo_rps_win_27", "Taunt_demo_rps_win_28"], ["Taunt_demo_rps_exert_04"]], [3.5f, 1.7f], 0);
             _rps_demo_winrock = RegisterSound([["Taunt_demo_rps_win_03", "Taunt_demo_rps_win_04", "Taunt_demo_rps_win_06", "Taunt_demo_rps_win_08", "Taunt_demo_rps_win_16", "Taunt_demo_rps_win_24", "Taunt_demo_rps_win_25", "Taunt_demo_rps_win_27", "Taunt_demo_rps_win_28"], ["Taunt_demo_rps_exert_04"]], [3.5f, 1.7f], 0);
             _rps_demo_winscissors = RegisterSound([["Taunt_demo_rps_win_03", "Taunt_demo_rps_win_04", "Taunt_demo_rps_win_06", "Taunt_demo_rps_win_08", "Taunt_demo_rps_win_16", "Taunt_demo_rps_win_24", "Taunt_demo_rps_win_25", "Taunt_demo_rps_win_27", "Taunt_demo_rps_win_28"], ["Taunt_demo_rps_exert_04"]], [3.5f, 1.7f], 0);
 
-            _rps_engi_initiate = RegisterSound([["Eng_taunt_rps_int_01", "Eng_taunt_rps_int_03", "Eng_taunt_rps_int_07"]], [0], 5);
+            _rps_engi_initiate = RegisterSound([["Eng_taunt_rps_int_01", "Eng_taunt_rps_int_03", "Eng_taunt_rps_int_07"]], [0], 3);
             _rps_engi_loss = RegisterSound([["Eng_taunt_rps_exert_07 (1)"], ["taunt_hard_clap1"], ["taunt_hard_clap1"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["Eng_taunt_rps_exert_01"], ["Eng_taunt_rps_exert_02"], ["Eng_taunt_rps_exert_03"], ["Eng_taunt_rps_lose_22", "Eng_taunt_rps_lose_25", "Eng_taunt_rps_lose_27", "Eng_taunt_rps_lose_29", "Eng_taunt_rps_lose_31"]], [0, .5f, .7f, 1.7f, 1.928f, 2.156f, 1.7f, 2.159f, 2.63f, 5.5f], 0);
             _rps_engi_winpaper = RegisterSound([["Eng_taunt_rps_exert_07 (1)"], ["taunt_hard_clap1"], ["taunt_hard_clap1"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["Eng_taunt_rps_exert_01"], ["Eng_taunt_rps_exert_02"], ["Eng_taunt_rps_exert_03"], ["Eng_taunt_rps_win_07", "Eng_taunt_rps_win_17", "Eng_taunt_rps_win_26", "Eng_taunt_rps_win_31", "Eng_taunt_rps_win_33"]], [0, .5f, .7f, 1.7f, 1.928f, 2.156f, 1.7f, 2.159f, 2.63f, 3.5f], 0);
             _rps_engi_winrock = RegisterSound([["Eng_taunt_rps_exert_07 (1)"], ["taunt_hard_clap1"], ["taunt_hard_clap1"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["Eng_taunt_rps_exert_01"], ["Eng_taunt_rps_exert_02"], ["Eng_taunt_rps_exert_03"], ["Eng_taunt_rps_win_10", "Eng_taunt_rps_win_17", "Eng_taunt_rps_win_26", "Eng_taunt_rps_win_31", "Eng_taunt_rps_win_33"]], [0, .5f, .7f, 1.7f, 1.928f, 2.156f, 1.7f, 2.159f, 2.63f, 3.5f], 0);
             _rps_engi_winscissors = RegisterSound([["Eng_taunt_rps_exert_07 (1)"], ["taunt_hard_clap1"], ["taunt_hard_clap1"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["Eng_taunt_rps_exert_01"], ["Eng_taunt_rps_exert_02"], ["Eng_taunt_rps_exert_03"], ["Eng_taunt_rps_win_06", "Eng_taunt_rps_win_17", "Eng_taunt_rps_win_26", "Eng_taunt_rps_win_31", "Eng_taunt_rps_win_33"]], [0, .5f, .7f, 1.7f, 1.928f, 2.156f, 1.7f, 2.159f, 2.63f, 3.5f], 0);
 
-            _rps_heavy_initiate = RegisterSound([["Heavy_taunt_rps_int_01", "Heavy_taunt_rps_int_02", "Heavy_taunt_rps_int_04"]], [0], 5);
+            _rps_heavy_initiate = RegisterSound([["Heavy_taunt_rps_int_01", "Heavy_taunt_rps_int_02", "Heavy_taunt_rps_int_04"]], [0], 3);
             _rps_heavy_loss = RegisterSound([["fist_hit_world1", "fist_hit_world2"], ["fist_hit_world1", "fist_hit_world2"], ["fist_hit_world1", "fist_hit_world2"], ["Heavy_taunt_rps_lose_11", "Heavy_taunt_rps_lose_13", "Heavy_taunt_rps_lose_18"]], [1.7f, 2.2f, 2.7f, 5.5f], 0);
             _rps_heavy_winpaper = RegisterSound([["fist_hit_world1", "fist_hit_world2"], ["fist_hit_world1", "fist_hit_world2"], ["fist_hit_world1", "fist_hit_world2"], ["Heavy_taunt_kill_02", "Heavy_taunt_kill_09", "Heavy_taunt_rps_win_02", "Heavy_taunt_rps_win_03", "Heavy_taunt_rps_win_04", "Heavy_taunt_rps_win_09", "Heavy_taunt_rps_win_11", "Heavy_taunt_rps_win_12", "Heavy_taunt_rps_win_21", "Heavy_taunt_rps_win_27", "Heavy_taunt_rps_win_34"]], [1.7f, 2.2f, 2.7f, 3.5f], 0);
             _rps_heavy_winrock = RegisterSound([["fist_hit_world1", "fist_hit_world2"], ["fist_hit_world1", "fist_hit_world2"], ["fist_hit_world1", "fist_hit_world2"], ["Heavy_taunt_kill_02", "Heavy_taunt_kill_09", "Heavy_taunt_rps_int_05", "Heavy_taunt_rps_win_02", "Heavy_taunt_rps_win_03", "Heavy_taunt_rps_win_04", "Heavy_taunt_rps_win_09", "Heavy_taunt_rps_win_11", "Heavy_taunt_rps_win_12", "Heavy_taunt_rps_win_16", "Heavy_taunt_rps_win_27", "Heavy_taunt_rps_win_33"]], [1.7f, 2.2f, 2.7f, 3.5f], 0);
             _rps_heavy_winscissors = RegisterSound([["fist_hit_world1", "fist_hit_world2"], ["fist_hit_world1", "fist_hit_world2"], ["fist_hit_world1", "fist_hit_world2"], ["Heavy_taunt_kill_02", "Heavy_taunt_kill_09", "Heavy_taunt_rps_win_02", "Heavy_taunt_rps_win_03", "Heavy_taunt_rps_win_04", "Heavy_taunt_rps_win_09", "Heavy_taunt_rps_win_11", "Heavy_taunt_rps_win_12", "Heavy_taunt_rps_win_21", "Heavy_taunt_rps_win_27", "Heavy_taunt_rps_win_38"]], [1.7f, 2.2f, 2.7f, 3.5f], 0);
 
+            _rps_medic_initiate = RegisterSound([["Medic_taunt_rps_int_01"]], [0], 3);
+            _rps_medic_loss = RegisterSound([["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["Medic_taunt_rps_exert_01"], ["Medic_taunt_rps_exert_07"], ["Medic_taunt_rps_exert_24"], ["Medic_taunt_rps_lose_12", "Medic_taunt_rps_lose_14", "Medic_taunt_rps_lose_16", "Medic_taunt_rps_lose_17", "Medic_taunt_rps_lose_19"]], [1.7f, 2.178f, 2.656f, 1.7f, 2.178f, 2.656f, 5.5f], 0);
+            _rps_medic_winpaper = RegisterSound([["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["Medic_taunt_rps_exert_01"], ["Medic_taunt_rps_exert_07"], ["Medic_taunt_rps_exert_24"], ["Medic_taunt_rps_win_04", "Medic_taunt_rps_win_05", "Medic_taunt_rps_win_06", "Medic_taunt_rps_win_08", "Medic_taunt_rps_win_09"]], [1.7f, 2.178f, 2.656f, 1.7f, 2.178f, 2.656f, 3.5f], 0);
+            _rps_medic_winrock = RegisterSound([["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["Medic_taunt_rps_exert_01"], ["Medic_taunt_rps_exert_07"], ["Medic_taunt_rps_exert_24"], ["Medic_taunt_rps_win_04", "Medic_taunt_rps_win_05", "Medic_taunt_rps_win_06", "Medic_taunt_rps_win_08", "Medic_taunt_rps_win_09"]], [1.7f, 2.178f, 2.656f, 1.7f, 2.178f, 2.656f, 3.5f], 0);
+            _rps_medic_winscissors = RegisterSound([["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["Medic_taunt_rps_exert_01"], ["Medic_taunt_rps_exert_07"], ["Medic_taunt_rps_exert_24"], ["Medic_taunt_rps_win_04", "Medic_taunt_rps_win_05", "Medic_taunt_rps_win_06", "Medic_taunt_rps_win_08", "Medic_taunt_rps_win_09"]], [1.7f, 2.178f, 2.656f, 1.7f, 2.178f, 2.656f, 3.5f], 0);
 
+            _rps_pyro_initiate = RegisterSound([["Pyro_taunt_rps_int_02", "Pyro_taunt_rps_int_04", "Pyro_taunt_rps_int_05", "Pyro_taunt_rps_int_07", "Pyro_taunt_rps_int_08"]], [0], 3);
+            _rps_pyro_loss = RegisterSound([["Pyro_taunt_rps_exert_18 (1)"], ["Pyro_taunt_rps_exert_21"], ["Pyro_taunt_rps_exert_22"], ["Pyro_taunt_rps_exert_23"], ["Pyro_taunt_rps_lose_03"]], [0f, 1.7f, 2.178f, 2.656f, 5.5f], 0);
+            _rps_pyro_winpaper = RegisterSound([["Pyro_taunt_rps_exert_18 (1)"], ["Pyro_taunt_rps_exert_21"], ["Pyro_taunt_rps_exert_22"], ["Pyro_taunt_rps_exert_23"], ["Pyro_laughevil01"]], [0f, 1.7f, 2.178f, 2.656f, 3.5f], 0);
+            _rps_pyro_winrock = RegisterSound([["Pyro_taunt_rps_exert_18 (1)"], ["Pyro_taunt_rps_exert_21"], ["Pyro_taunt_rps_exert_22"], ["Pyro_taunt_rps_exert_23"], ["Pyro_laughevil01"]], [0f, 1.7f, 2.178f, 2.656f, 3.5f], 0);
+            _rps_pyro_winscissors = RegisterSound([["Pyro_taunt_rps_exert_18 (1)"], ["Pyro_taunt_rps_exert_21"], ["Pyro_taunt_rps_exert_22"], ["Pyro_taunt_rps_exert_23"], ["Pyro_laughevil01"]], [0f, 1.7f, 2.178f, 2.656f, 3.5f], 0);
 
+            _rps_scout_initiate = RegisterSound([["Scout_taunt_rps_int_02", "Scout_taunt_rps_int_03", "Scout_taunt_rps_int_05", "Scout_taunt_rps_int_09", "Scout_taunt_rps_int_10"]], [0], 3);
+            _rps_scout_loss = RegisterSound([["Scout_taunt_rps_exert_23"], ["Scout_taunt_rps_exert_25"], ["Scout_taunt_rps_lose_01", "Scout_taunt_rps_lose_03", "Scout_taunt_rps_lose_06", "Scout_taunt_rps_lose_07"]], [1.7f, 0, 5.5f], 0);
+            _rps_scout_lossrock = RegisterSound([["Scout_taunt_rps_exert_23"], ["Scout_taunt_rps_exert_25"], ["Scout_taunt_rps_lose_01", "Scout_taunt_rps_lose_03", "Scout_taunt_rps_lose_06", "Scout_taunt_rps_lose_07", "Scout_taunt_rps_lose_12"]], [1.7f, 0, 5.5f], 0);
+            _rps_scout_winpaper = RegisterSound([["Scout_taunt_rps_exert_23"], ["Scout_taunt_rps_exert_25"], ["taunt_sfx_bell_single"], ["taunt_eng_swoosh"], ["taunt_eng_swoosh"], ["taunt_eng_swoosh"], ["taunt_eng_swoosh"], ["Scout_taunt_misc_03", "Scout_taunt_misc_10", "Scout_taunt_misc_14", "Scout_taunt_rps_win_27", "Scout_taunt_rps_win_51"]], [1.7f, 0, 3.5f, 5.25f, 5f, 4f, 4.5f, 3.5f], 0);
+            _rps_scout_winrock = RegisterSound([["Scout_taunt_rps_exert_23"], ["Scout_taunt_rps_exert_25"], ["taunt_sfx_bell_single"], ["taunt_eng_swoosh"], ["taunt_eng_swoosh"], ["taunt_eng_swoosh"], ["taunt_eng_swoosh"], ["Scout_taunt_misc_03", "Scout_taunt_misc_10", "Scout_taunt_misc_14", "Scout_taunt_rps_win_34"]], [1.7f, 0, 3.5f, 5.25f, 5f, 4f, 4.5f, 3.5f], 0);
+            _rps_scout_winscissors = RegisterSound([["Scout_taunt_rps_exert_23"], ["Scout_taunt_rps_exert_25"], ["taunt_sfx_bell_single"], ["taunt_eng_swoosh"], ["taunt_eng_swoosh"], ["taunt_eng_swoosh"], ["taunt_eng_swoosh"], ["Scout_taunt_misc_03", "Scout_taunt_misc_10", "Scout_taunt_misc_14", "Scout_taunt_rps_win_36"]], [1.7f, 0, 3.5f, 5.25f, 5f, 4f, 4.5f, 3.5f], 0);
 
+            _rps_sniper_initiate_start = RegisterSound([["Sniper_taunt_rps_int_03", "Sniper_taunt_rps_int_01"]], [0], 0);
+            _rps_sniper_initiate_loop = RegisterSound([["Sniper_taunt_rps_int_05", "Sniper_taunt_rps_int_06", "Sniper_taunt_rps_int_07", "Sniper_taunt_rps_int_11"]], [3], 3);
+            _rps_sniper_loss = RegisterSound([["Sniper_taunt_rps_exert_17"], ["Sniper_taunt_rps_exert_01"], ["Sniper_taunt_rps_exert_02"], ["Sniper_taunt_rps_exert_16"], ["Sniper_taunt_rps_lose_04", "Sniper_taunt_rps_lose_06", "Sniper_taunt_rps_lose_13", "Sniper_taunt_rps_lose_15", "Sniper_taunt_rps_lose_22"]], [0, 1.7f, 2.178f, 2.656f, 5.5f], 0);
+            _rps_sniper_winpaper = RegisterSound([["Sniper_taunt_rps_exert_17"], ["Sniper_taunt_rps_exert_01"], ["Sniper_taunt_rps_exert_02"], ["Sniper_taunt_rps_exert_16"], ["Sniper_taunt_rps_win_14", "Sniper_taunt_rps_win_15"]], [0, 1.7f, 2.178f, 2.656f, 3.5f], 0);
+            _rps_sniper_winrock = RegisterSound([["Sniper_taunt_rps_exert_17"], ["Sniper_taunt_rps_exert_01"], ["Sniper_taunt_rps_exert_02"], ["Sniper_taunt_rps_exert_16"], ["Sniper_taunt_rps_win_20", "Sniper_taunt_rps_win_15"]], [0, 1.7f, 2.178f, 2.656f, 3.5f], 0);
+            _rps_sniper_winscissors = RegisterSound([["Sniper_taunt_rps_exert_17"], ["Sniper_taunt_rps_exert_01"], ["Sniper_taunt_rps_exert_02"], ["Sniper_taunt_rps_exert_16"], ["Sniper_taunt_rps_win_14", "Sniper_taunt_rps_win_15"]], [0, 1.7f, 2.178f, 2.656f, 3.5f], 0);
 
+            _rps_soldier_initiate = RegisterSound([["Soldier_taunt_rps_int_01", "Soldier_taunt_rps_int_03", "Soldier_taunt_rps_int_05", "Soldier_taunt_rps_int_07", "Soldier_taunt_rps_int_08"]], [0], 3);
+            _rps_soldier_loss = RegisterSound([["Soldier_taunt_rps_exert_11"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["Soldier_taunt_rps_exert_01"], ["Soldier_taunt_rps_lose_01", "Soldier_taunt_rps_lose_05", "Soldier_taunt_rps_lose_12", "Soldier_taunt_rps_lose_14", "Soldier_taunt_rps_lose_21", "Soldier_taunt_rps_lose_22"]], [0, 1.7f, 1.928f, 2.156f, 1.7f, 5.5f], 0);
+            _rps_soldier_winpaper = RegisterSound([["Soldier_taunt_rps_exert_11"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["Soldier_taunt_rps_exert_01"], ["Soldier_taunt_rps_win_55"]], [0, 1.7f, 1.928f, 2.156f, 1.7f, 3.5f], 0);
+            _rps_soldier_winrock = RegisterSound([["Soldier_taunt_rps_exert_11"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["Soldier_taunt_rps_exert_01"], ["Soldier_taunt_rps_win_57"]], [0, 1.7f, 1.928f, 2.156f, 1.7f, 3.5f], 0);
+            _rps_soldier_winscissors = RegisterSound([["Soldier_taunt_rps_exert_11"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["item_boxing_gloves_pickup"], ["Soldier_taunt_rps_exert_01"], ["Soldier_taunt_rps_win_61"]], [0, 1.7f, 1.928f, 2.156f, 1.7f, 3.5f], 0);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            _rps_spy_initiate = RegisterSound([["Spy_rpshold01", "Spy_rpsstart01", "Spy_taunt_rps_int_01", "Spy_taunt_rps_int_05", "Spy_taunt_rps_int_07", "Spy_taunt_rps_int_08"]], [0], 3);
+            _rps_spy_windup1 = RegisterSound([["Spy_rpscountone01"], ["Spy_rpscounttwo01"], ["Spy_rpscountthree01"]], [1.7f, 2.178f, 2.656f], 0);
+            _rps_spy_windup2 = RegisterSound([["Spy_taunt_rps_exert_08"], ["Spy_taunt_rps_exert_09"], ["Spy_taunt_rps_exert_10"]], [1.7f, 2.178f, 2.656f], 0);
+            _rps_spy_windup3 = RegisterSound([["Spy_rpscountrock01"], ["Spy_rpscountpaper01"], ["Spy_rpscountscissor01"]], [1.7f, 2.178f, 2.656f], 0);
+            _rps_spy_losspaper = RegisterSound([["Spy_rpslose01", "Spy_rpslose02", "Spy_rpsregretrock01", "Spy_taunt_rps_lose_04", "Spy_taunt_rps_lose_05", "Spy_taunt_rps_lose_06", "Spy_taunt_rps_lose_09", "Spy_taunt_rps_lose_11", "Spy_taunt_rps_lose_12", "Spy_taunt_rps_lose_15"]], [5.5f], 0);
+            _rps_spy_lossrock = RegisterSound([["Spy_rpslose01", "Spy_rpslose02", "Spy_rpsregretscissor01", "Spy_taunt_rps_lose_04", "Spy_taunt_rps_lose_05", "Spy_taunt_rps_lose_06", "Spy_taunt_rps_lose_09", "Spy_taunt_rps_lose_11", "Spy_taunt_rps_lose_12", "Spy_taunt_rps_lose_15"]], [5.5f], 0);
+            _rps_spy_lossscissors = RegisterSound([["Spy_rpslose01", "Spy_rpslose02", "Spy_rpsregretpaper01", "Spy_taunt_rps_lose_04", "Spy_taunt_rps_lose_05", "Spy_taunt_rps_lose_06", "Spy_taunt_rps_lose_09", "Spy_taunt_rps_lose_11", "Spy_taunt_rps_lose_12", "Spy_taunt_rps_lose_15"]], [5.5f], 0);
+            _rps_spy_winpaper = RegisterSound([["Spy_rpspaperwin01", "Spy_rpspaperwin02", "Spy_rpspaperwin03", "Spy_rpswin01", "Spy_rpswin02", "Spy_taunt_rps_win_02", "Spy_taunt_rps_win_03", "Spy_taunt_rps_win_09", "Spy_taunt_rps_win_11", "Spy_taunt_rps_win_12", "Spy_taunt_rps_win_13", "Spy_taunt_rps_win_14", "Spy_taunt_rps_win_15", "Spy_taunt_rps_win_16", "Spy_taunt_rps_win_17", "Spy_taunt_rps_win_18", "Spy_taunt_rps_win_19", "Spy_taunt_rps_win_20", "Spy_taunt_rps_win_21", "Spy_taunt_rps_win_22", "Spy_taunt_rps_win_23"]], [3.5f], 0);
+            _rps_spy_winrock = RegisterSound([["Spy_rpsrockwin01", "Spy_rpswin01", "Spy_rpswin02", "Spy_taunt_rps_win_02", "Spy_taunt_rps_win_03", "Spy_taunt_rps_win_09", "Spy_taunt_rps_win_11", "Spy_taunt_rps_win_12", "Spy_taunt_rps_win_13", "Spy_taunt_rps_win_14", "Spy_taunt_rps_win_15", "Spy_taunt_rps_win_16", "Spy_taunt_rps_win_17", "Spy_taunt_rps_win_18", "Spy_taunt_rps_win_19", "Spy_taunt_rps_win_20", "Spy_taunt_rps_win_21", "Spy_taunt_rps_win_22", "Spy_taunt_rps_win_23"]], [3.5f], 0);
+            _rps_spy_winscissors = RegisterSound([["Spy_rpsscissorwin01", "Spy_rpswin01", "Spy_rpswin02", "Spy_taunt_rps_win_02", "Spy_taunt_rps_win_03", "Spy_taunt_rps_win_09", "Spy_taunt_rps_win_11", "Spy_taunt_rps_win_12", "Spy_taunt_rps_win_13", "Spy_taunt_rps_win_14", "Spy_taunt_rps_win_15", "Spy_taunt_rps_win_16", "Spy_taunt_rps_win_17", "Spy_taunt_rps_win_18", "Spy_taunt_rps_win_19", "Spy_taunt_rps_win_20", "Spy_taunt_rps_win_21", "Spy_taunt_rps_win_22", "Spy_taunt_rps_win_23"]], [3.5f], 0);
         }
         internal int RegisterSound(string[][] audioClipNames, List<float> delays, float repeatTimer)
         {
@@ -578,31 +606,31 @@ namespace TitanFall2Emotes
             CustomEmotesAPI.AddNonAnimatingEmote("Kazotsky Kick");
             CustomEmotesAPI.BlackListEmote("Kazotsky Kick");
             string emote;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Demo_Start" }, new string[] { "Kazotsky" }, "Kazotsky", true, new string[] { "KazotskyKick/Kazotsky_Demo_Loop" }); //names are wrong, should be Kazotsky_Sniper_Loop
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Demo_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Demo_Loop" }); //names are wrong, should be Kazotsky_Sniper_Loop
             KazotskyKick_Emotes.Add(emote);
             int syncpos = BoneMapper.animClips[emote].syncPos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Engi_Start" }, new string[] { "Kazotsky" }, "Kazotsky", true, new string[] { "KazotskyKick/Kazotsky_Engi_Loop" });
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Engi_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Engi_Loop" });
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Heavy_Start" }, new string[] { "Kazotsky" }, "Kazotsky", true, new string[] { "KazotskyKick/Kazotsky_Heavy_Loop" });
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Heavy_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Heavy_Loop" });
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Medic_Start" }, new string[] { "Kazotsky" }, "Kazotsky", true, new string[] { "KazotskyKick/Kazotsky_Medic_Loop" });
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Medic_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Medic_Loop" });
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Pyro_Start" }, new string[] { "Kazotsky" }, "Kazotsky", true, new string[] { "KazotskyKick/Kazotsky_Pyro_Loop" });
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Pyro_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Pyro_Loop" });
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Scout_Start" }, new string[] { "Kazotsky" }, "Kazotsky", true, new string[] { "KazotskyKick/Kazotsky_Scout_Loop" });
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Scout_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Scout_Loop" });
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Sniper_Start" }, new string[] { "Kazotsky" }, "Kazotsky", true, new string[] { "KazotskyKick/Kazotsky_Sniper_Loop" });
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Sniper_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Sniper_Loop" });
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Soldier_Start" }, new string[] { "Kazotsky" }, "Kazotsky", true, new string[] { "KazotskyKick/Kazotsky_Soldier_Loop" });
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Soldier_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Soldier_Loop" });
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Spy_Start" }, new string[] { "Kazotsky" }, "Kazotsky", true, new string[] { "KazotskyKick/Kazotsky_Spy_Loop" });
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Spy_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Spy_Loop" });
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
         }
@@ -612,31 +640,31 @@ namespace TitanFall2Emotes
             CustomEmotesAPI.BlackListEmote("Conga");
 
             string emote;
-            emote = AddHiddenAnimation(new string[] { "Conga/Demo_Conga" }, new string[] { "Conga" }, "Conga", true);
+            emote = AddHiddenAnimation(new string[] { "Conga/Demo_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true);
             Conga_Emotes.Add(emote);
             int syncpos = BoneMapper.animClips[emote].syncPos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Engi_Conga" }, new string[] { "Conga" }, "Conga", true);
+            emote = AddHiddenAnimation(new string[] { "Conga/Engi_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Heavy_Conga" }, new string[] { "Conga" }, "Conga", true);
+            emote = AddHiddenAnimation(new string[] { "Conga/Heavy_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Medic_Conga" }, new string[] { "Conga" }, "Conga", true);
+            emote = AddHiddenAnimation(new string[] { "Conga/Medic_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Pyro_Conga" }, new string[] { "Conga" }, "Conga", true);
+            emote = AddHiddenAnimation(new string[] { "Conga/Pyro_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Scout_Conga" }, new string[] { "Conga" }, "Conga", true);
+            emote = AddHiddenAnimation(new string[] { "Conga/Scout_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Sniper_Conga" }, new string[] { "Conga" }, "Conga", true);
+            emote = AddHiddenAnimation(new string[] { "Conga/Sniper_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Soldier_Conga" }, new string[] { "Conga" }, "Conga", true);
+            emote = AddHiddenAnimation(new string[] { "Conga/Soldier_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Spy_Conga" }, new string[] { "Conga" }, "Conga", true);
+            emote = AddHiddenAnimation(new string[] { "Conga/Spy_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
         }
@@ -695,21 +723,21 @@ namespace TitanFall2Emotes
                 }
             }
         }
-        private void StopAudioContainerStuff(BoneMapper mapper)
+        internal void StopAudioContainerStuff(BoneMapper mapper)
         {
-            foreach (var item in AudioContainerHolder.instance.currentContainers)
+            for (int i = 0; i < AudioContainerHolder.instance.currentContainers.Count; i++)
             {
-                if (item.mapper == mapper)
+                if (AudioContainerHolder.instance.currentContainers[i].mapper == mapper)
                 {
-                    foreach (var routine in item.coroutines)
+                    foreach (var routine in AudioContainerHolder.instance.currentContainers[i].coroutines)
                     {
                         if (routine is not null)
                         {
                             AudioContainerHolder.instance.StopCoroutine(routine);
                         }
                     }
-                    AudioContainerHolder.instance.currentContainers.Remove(item);
-                    return;
+                    AudioContainerHolder.instance.currentContainers.RemoveAt(i);
+                    i--;
                 }
             }
         }
@@ -722,6 +750,7 @@ namespace TitanFall2Emotes
                 mapper.gameObject.AddComponent<TF2EmoteTracker>();
             }
             int targetAudioThing = -1;
+            int targetAudioThing2 = -1;
             StopAudioContainerStuff(mapper);
             switch (newAnimation)
             {
@@ -748,6 +777,7 @@ namespace TitanFall2Emotes
                     g.transform.localScale = Vector3.one;
                     mapper.AssignParentGameObject(g, true, true, true, false, false);
                     chair.chair = g;
+                    targetAudioThing = _play_rancho;
                     break;
                 case "Rock Paper Scissors":
                     if (TF2Networker.instance.IsOwner && TF2Networker.instance.IsServer)
@@ -783,7 +813,7 @@ namespace TitanFall2Emotes
                     }
                     break;
 
-                    //Fleeeeep
+                //Fleeeeep
                 case "Demo_Flip_Start":
                     targetAudioThing = _demo_flip_waiting;
                     break;
@@ -807,96 +837,96 @@ namespace TitanFall2Emotes
 
 
                 case "Heavy_Flip_Start":
-                    targetAudioThing =  _heavy_flip_waiting;
+                    targetAudioThing = _heavy_flip_waiting;
                     break;
                 case "Heavy_Flip_Throw":
-                    targetAudioThing =  _heavy_flip_throw;
+                    targetAudioThing = _heavy_flip_throw;
                     break;
                 case "Heavy_Flip_Flip":
-                    targetAudioThing =  _heavy_flip_flip;
+                    targetAudioThing = _heavy_flip_flip;
                     break;
 
 
                 case "Medic_Flip_Start":
-                    targetAudioThing =  _medic_flip_waiting;
+                    targetAudioThing = _medic_flip_waiting;
                     break;
                 case "Medic_Flip_Throw":
-                    targetAudioThing =  _medic_flip_throw;
+                    targetAudioThing = _medic_flip_throw;
                     break;
                 case "Medic_Flip_Flip":
-                    targetAudioThing =  _medic_flip_flip;
+                    targetAudioThing = _medic_flip_flip;
                     break;
 
 
                 case "Pyro_Flip_Start":
-                    targetAudioThing =  _pyro_flip_waiting;
+                    targetAudioThing = _pyro_flip_waiting;
                     break;
                 case "Pyro_Flip_Throw":
-                    targetAudioThing =  _pyro_flip_throw;
+                    targetAudioThing = _pyro_flip_throw;
                     break;
                 case "Pyro_Flip_Flip":
-                    targetAudioThing =  _pyro_flip_flip;
+                    targetAudioThing = _pyro_flip_flip;
                     break;
 
 
                 case "Scout_Flip_Start":
-                    targetAudioThing =  _scout_flip_waiting;
+                    targetAudioThing = _scout_flip_waiting;
                     break;
                 case "Scout_Flip_Throw":
-                    targetAudioThing =  _scout_flip_throw;
+                    targetAudioThing = _scout_flip_throw;
                     break;
                 case "Scout_Flip_Flip":
-                    targetAudioThing =  _scout_flip_flip;
+                    targetAudioThing = _scout_flip_flip;
                     break;
 
 
                 case "Sniper_Flip_Start":
-                    targetAudioThing =  _sniper_flip_waiting;
+                    targetAudioThing = _sniper_flip_waiting;
                     break;
                 case "Sniper_Flip_Throw":
-                    targetAudioThing =  _sniper_flip_throw;
+                    targetAudioThing = _sniper_flip_throw;
                     break;
                 case "Sniper_Flip_Flip":
-                    targetAudioThing =  _sniper_flip_flip;
+                    targetAudioThing = _sniper_flip_flip;
                     break;
 
 
                 case "Soldier_Flip_Start":
-                    targetAudioThing =  _soldier_flip_waiting;
+                    targetAudioThing = _soldier_flip_waiting;
                     break;
                 case "Soldier_Flip_Throw":
-                    targetAudioThing =  _soldier_flip_throw;
+                    targetAudioThing = _soldier_flip_throw;
                     break;
                 case "Soldier_Flip_Flip":
-                    targetAudioThing =  _soldier_flip_flip;
+                    targetAudioThing = _soldier_flip_flip;
                     break;
 
 
                 case "Spy_Flip_Start":
-                    targetAudioThing =  _spy_flip_waiting;
+                    targetAudioThing = _spy_flip_waiting;
                     break;
                 case "Spy_Flip_Throw":
-                    targetAudioThing =  _spy_flip_throw;
+                    targetAudioThing = _spy_flip_throw;
                     break;
                 case "Spy_Flip_Flip":
-                    targetAudioThing =  _spy_flip_flip;
+                    targetAudioThing = _spy_flip_flip;
                     break;
 
 
 
 
 
-                    //RPS
+                //RPS
                 case "EngiRPSStart":
-                    targetAudioThing =  _rps_engi_initiate;
+                    targetAudioThing = _rps_engi_initiate;
                     break;
                 case "EngiRPS_RLose":
                 case "EngiRPS_PLose":
                 case "EngiRPS_SLose":
-                    targetAudioThing =  _rps_engi_loss;
+                    targetAudioThing = _rps_engi_loss;
                     break;
                 case "EngiRPS_RWin":
-                    targetAudioThing =  _rps_engi_winpaper;
+                    targetAudioThing = _rps_engi_winpaper;
                     break;
                 case "EngiRPS_PWin":
                     targetAudioThing = _rps_engi_winrock;
@@ -943,6 +973,172 @@ namespace TitanFall2Emotes
                     targetAudioThing = _rps_heavy_winscissors;
                     break;
 
+
+                case "MedicRPS_Start":
+                    targetAudioThing = _rps_medic_initiate;
+                    break;
+                case "MedicRPS_RLose":
+                case "MedicRPS_PLose":
+                case "MedicRPS_SLose":
+                    targetAudioThing = _rps_medic_loss;
+                    break;
+                case "MedicRPS_RWin":
+                    targetAudioThing = _rps_medic_winpaper;
+                    break;
+                case "MedicRPS_PWin":
+                    targetAudioThing = _rps_medic_winrock;
+                    break;
+                case "MedicRPS_SWin":
+                    targetAudioThing = _rps_medic_winscissors;
+                    break;
+
+
+                case "PyroRPS_Start":
+                    targetAudioThing = _rps_pyro_initiate;
+                    break;
+                case "PyroRPS_RLose":
+                case "PyroRPS_PLose":
+                case "PyroRPS_SLose":
+                    targetAudioThing = _rps_pyro_loss;
+                    break;
+                case "PyroRPS_RWin":
+                    targetAudioThing = _rps_pyro_winpaper;
+                    break;
+                case "PyroRPS_PWin":
+                    targetAudioThing = _rps_pyro_winrock;
+                    break;
+                case "PyroRPS_SWin":
+                    targetAudioThing = _rps_pyro_winscissors;
+                    break;
+
+
+                case "ScoutRPS_Start":
+                    targetAudioThing = _rps_scout_initiate;
+                    break;
+                case "ScoutRPS_RLose":
+                    targetAudioThing = _rps_scout_lossrock;
+                    break;
+                case "ScoutRPS_PLose":
+                case "ScoutRPS_SLose":
+                    targetAudioThing = _rps_scout_loss;
+                    break;
+                case "ScoutRPS_RWin":
+                    targetAudioThing = _rps_scout_winpaper;
+                    break;
+                case "ScoutRPS_PWin":
+                    targetAudioThing = _rps_scout_winrock;
+                    break;
+                case "ScoutRPS_SWin":
+                    targetAudioThing = _rps_scout_winscissors;
+                    break;
+
+
+                case "SniperRPS_Start":
+                    AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, _rps_sniper_initiate_loop, mapper);
+                    targetAudioThing = _rps_sniper_initiate_start;
+                    break;
+                case "SniperRPS_RLose":
+                case "SniperRPS_PLose":
+                case "SniperRPS_SLose":
+                    targetAudioThing = _rps_sniper_loss;
+                    break;
+                case "SniperRPS_RWin":
+                    targetAudioThing = _rps_sniper_winpaper;
+                    break;
+                case "SniperRPS_PWin":
+                    targetAudioThing = _rps_sniper_winrock;
+                    break;
+                case "SniperRPS_SWin":
+                    targetAudioThing = _rps_sniper_winscissors;
+                    break;
+
+
+                case "SoldierRPS_Start":
+                    targetAudioThing = _rps_soldier_initiate;
+                    break;
+                case "SoldierRPS_RLose":
+                case "SoldierRPS_PLose":
+                case "SoldierRPS_SLose":
+                    targetAudioThing = _rps_soldier_loss;
+                    break;
+                case "SoldierRPS_RWin":
+                    targetAudioThing = _rps_soldier_winpaper;
+                    break;
+                case "SoldierRPS_PWin":
+                    targetAudioThing = _rps_soldier_winrock;
+                    break;
+                case "SoldierRPS_SWin":
+                    targetAudioThing = _rps_soldier_winscissors;
+                    break;
+
+
+                case "SpyRPS_Start":
+                    targetAudioThing = _rps_spy_initiate;
+                    break;
+                case "SpyRPS_RLose":
+                    RandomSpyWindup(mapper);
+                    targetAudioThing = _rps_spy_lossrock;
+                    break;
+                case "SpyRPS_PLose":
+                    RandomSpyWindup(mapper);
+                    targetAudioThing = _rps_spy_losspaper;
+                    break;
+                case "SpyRPS_SLose":
+                    RandomSpyWindup(mapper);
+                    targetAudioThing = _rps_spy_lossscissors;
+                    break;
+                case "SpyRPS_RWin":
+                    RandomSpyWindup(mapper);
+                    targetAudioThing = _rps_spy_winpaper;
+                    break;
+                case "SpyRPS_PWin":
+                    RandomSpyWindup(mapper);
+                    targetAudioThing = _rps_spy_winrock;
+                    break;
+                case "SpyRPS_SWin":
+                    RandomSpyWindup(mapper);
+                    targetAudioThing = _rps_spy_winscissors;
+                    break;
+
+
+
+                case "Demo_Conga":
+                    targetAudioThing2 = _conga_demo_start;
+                    targetAudioThing = _conga_demo_loop;
+                    break;
+                case "Engi_Conga":
+                    targetAudioThing2 = _conga_engi_start;
+                    targetAudioThing = _conga_engi_loop;
+                    break;
+                case "Heavy_Conga":
+                    targetAudioThing2 = _conga_heavy_start;
+                    targetAudioThing = _conga_heavy_loop;
+                    break;
+                case "Medic_Conga":
+                    targetAudioThing2 = _conga_medic_start;
+                    targetAudioThing = _conga_medic_loop;
+                    break;
+                case "Pyro_Conga":
+                    targetAudioThing2 = _conga_pyro_start;
+                    targetAudioThing = _conga_pyro_loop;
+                    break;
+                case "Scout_Conga":
+                    targetAudioThing2 = _conga_scout_start;
+                    targetAudioThing = _conga_scout_loop;
+                    break;
+                case "Sniper_Conga":
+                    targetAudioThing2 = _conga_sniper_start;
+                    targetAudioThing = _conga_sniper_loop;
+                    break;
+                case "Soldier_Conga":
+                    targetAudioThing2 = _conga_soldier_start;
+                    targetAudioThing = _conga_soldier_loop;
+                    break;
+                case "Spy_Conga":
+                    targetAudioThing2 = _conga_spy_start;
+                    targetAudioThing = _conga_spy_loop;
+                    break;
+
                 default:
                     break;
             }
@@ -950,9 +1146,29 @@ namespace TitanFall2Emotes
             {
                 AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, targetAudioThing, mapper);
             }
+            if (targetAudioThing2 != -1)
+            {
+                AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, targetAudioThing2, mapper);
+            }
             mapper.gameObject.GetComponent<TF2EmoteTracker>().currentAnimation = newAnimation;
         }
-
+        internal void RandomSpyWindup(BoneMapper mapper)
+        {
+            switch (UnityEngine.Random.Range(0, 3))
+            {
+                case 0:
+                    AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, _rps_spy_windup1, mapper);
+                    break;
+                case 1:
+                    AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, _rps_spy_windup2, mapper);
+                    break;
+                case 2:
+                    AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, _rps_spy_windup3, mapper);
+                    break;
+                default:
+                    break;
+            }
+        }
         void Update()
         {
 
@@ -977,7 +1193,6 @@ namespace TitanFall2Emotes
             //mapper.GetComponentInParent<CharacterModel>().body.healthComponent.Suicide();
         }
 
-        //TODO
         internal void AddAnimation(string AnimClip, string wwise, bool looping, bool dimAudio, bool sync)
         {
             //CustomEmotesAPI.AddCustomAnimation(, looping, $"Play_{wwise}", $"Stop_{wwise}", dimWhenClose: dimAudio, syncAnim: sync, syncAudio: sync);
@@ -1100,13 +1315,8 @@ namespace TitanFall2Emotes
             BoneMapper.animClips[emote].vulnerableEmote = true;
             return emote;
         }
-        internal string AddHiddenAnimation(string[] AnimClip, string[] wwise, string stopWwise, bool sync)
+        internal string AddHiddenAnimation(string[] AnimClip, AudioClip[] audioClips, bool sync)
         {
-            List<string> stopwwise = new List<string>();
-            foreach (var item in wwise)
-            {
-                stopwwise.Add($"Stop_{stopWwise}");
-            }
             List<AnimationClip> primary = new List<AnimationClip>();
             foreach (var item in AnimClip)
             {
@@ -1120,19 +1330,16 @@ namespace TitanFall2Emotes
                 looping = true,
                 visible = false,
                 syncAudio = sync,
-                thirdPerson = true
+                thirdPerson = true,
+                _primaryAudioClips = audioClips,
+                _primaryDMCAFreeAudioClips = audioClips
             };
             CustomEmotesAPI.AddCustomAnimation(clipParams);
             BoneMapper.animClips[emote].vulnerableEmote = true;
             return emote;
         }
-        internal string AddHiddenAnimation(string[] AnimClip, string[] wwise, string stopWwise, bool sync, string[] AnimClip2)
+        internal string AddHiddenAnimation(string[] AnimClip, AudioClip[] audioClips, bool sync, string[] AnimClip2)
         {
-            List<string> stopwwise = new List<string>();
-            foreach (var item in wwise)
-            {
-                stopwwise.Add($"Stop_{stopWwise}");
-            }
             List<AnimationClip> primary = new List<AnimationClip>();
             foreach (var item in AnimClip)
             {
@@ -1150,10 +1357,12 @@ namespace TitanFall2Emotes
             {
                 animationClip = primary.ToArray(),
                 secondaryAnimation = secondary.ToArray(),
-                looping = false,
+                looping = true,
                 visible = false,
                 syncAudio = sync,
-                thirdPerson = true
+                thirdPerson = true,
+                _primaryAudioClips = audioClips,
+                _primaryDMCAFreeAudioClips = audioClips
             };
             CustomEmotesAPI.AddCustomAnimation(clipParams);
             BoneMapper.animClips[emote].vulnerableEmote = true;

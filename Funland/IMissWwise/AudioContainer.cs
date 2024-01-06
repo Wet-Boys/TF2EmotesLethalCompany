@@ -54,7 +54,6 @@ namespace TitanFall2Emotes.IMissWwise
                 DebugClass.Log($"tried to play audio but AudioContainer was null!");
                 return;
             }
-            DebugClass.Log($"attempting to play {container.audioClips[0][0]} on {targetMapper}");
             PlayingAudioContainer c = new PlayingAudioContainer();
             c.mapper = targetMapper;
             c.coroutines.Add(PlayGroupOfAudio(source, container, c));
