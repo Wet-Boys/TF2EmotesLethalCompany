@@ -6,12 +6,8 @@ using System.Xml.Linq;
 using UnityEngine.Networking;
 using UnityEngine;
 using EmotesAPI;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Unity.Netcode;
-using UnityEngine;
 using GameNetcodeStuff;
+using Unity.Netcode;
 
 namespace TitanFall2Emotes
 {
@@ -20,7 +16,7 @@ namespace TitanFall2Emotes
         public static TF2Networker instance;
         private void Awake()
         {
-            name = "TF2 Networker";
+            name = "TF2_Networker";
             instance = this;
         }
         [Unity.Netcode.ClientRpc]

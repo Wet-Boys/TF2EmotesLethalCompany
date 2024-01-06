@@ -1,39 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text;
+using TitanFall2Emotes;
 using UnityEngine;
 
-public static class Assets
+internal static class Assets
 {
-    private static readonly List<AssetBundle> AssetBundles = new List<AssetBundle>();
+    internal static readonly List<AssetBundle> AssetBundles = new List<AssetBundle>();
     private static readonly Dictionary<string, int> AssetIndices = new Dictionary<string, int>();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="assetBundleLocation"></param>
-    public static void AddBundle(string assetBundleLocation)
+    internal static void LoadAssetBundlesFromFolder(string folderName)
     {
-        using var assetBundleStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"LethalEmotesAPI.{assetBundleLocation}");
-        AssetBundle assetBundle = AssetBundle.LoadFromStream(assetBundleStream);
-
-        int index = AssetBundles.Count;
-        AssetBundles.Add(assetBundle);
-
-        foreach (var assetName in assetBundle.GetAllAssetNames())
+        folderName = Path.Combine(Path.GetDirectoryName(TF2Plugin.PInfo.Location), folderName);
+        foreach (var file in Directory.GetFiles(folderName))
         {
-            string path = assetName.ToLowerInvariant();
+            AssetBundle assetBundle = AssetBundle.LoadFromFile(file);
 
-            if (path.StartsWith("assets/"))
-                path = path.Remove(0, "assets/".Length);
-            AssetIndices[path] = index;
+            int index = AssetBundles.Count;
+            AssetBundles.Add(assetBundle);
+
+            foreach (var assetName in assetBundle.GetAllAssetNames())
+            {
+                string path = assetName.ToLowerInvariant();
+                if (path.StartsWith("assets/"))
+                    path = path.Remove(0, "assets/".Length);
+
+                //DebugClass.Log($"paring [{path}] with [{index}]");
+                AssetIndices[path] = index;
+            }
+
+            DebugClass.Log($"Loaded AssetBundle: {Path.GetFileName(file)}");
         }
-
-        //DebugClass.Log($"Loaded AssetBundle: {assetBundleLocation}");
     }
 
-    public static T Load<T>(string assetName) where T : UnityEngine.Object
+    internal static T Load<T>(string assetName) where T : UnityEngine.Object
     {
         try
         {
@@ -47,12 +49,14 @@ public static class Assets
             if (assetName.StartsWith("assets/"))
                 assetName = assetName.Remove(0, "assets/".Length);
             int index = AssetIndices[assetName];
-            return AssetBundles[index].LoadAsset<T>($"assets/{assetName}");
+            T asset = AssetBundles[index].LoadAsset<T>($"assets/{assetName}");
+            return asset;
         }
         catch (Exception e)
         {
-            DebugClass.Log($"Couldn't load asset [{assetName}] exception: {e}");
+            DebugClass.Log($"Couldn't load asset [{assetName}] reason: {e}");
             return null;
         }
+
     }
 }

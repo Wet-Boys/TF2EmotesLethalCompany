@@ -1,7 +1,10 @@
 ManifestFileVersion: 0
-CRC: 2520167594
+CRC: 3703386131
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: tf2emotes
+      Dependencies: {}
+    Info_1:
+      Name: tf2audio
       Dependencies: {}

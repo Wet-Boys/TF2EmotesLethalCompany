@@ -8,7 +8,7 @@ namespace TitanFall2Emotes.IMissWwise
     //yes I'm just recreating what I lost when I lost wwise :(
     public class BaseAudioContainer : MonoBehaviour
     {
-        public AudioSource audioSource;
+        public BoneMapper associatedMapper;
         public AudioClip clip;
         public float delay;
         public int targetContainer = 0;
@@ -16,14 +16,14 @@ namespace TitanFall2Emotes.IMissWwise
         
         public virtual void Play()
         {
-            audioSource.PlayOneShot(clip);//have some event here that will fire when the audiosource has finished playing?
+            associatedMapper.personalAudioSource.PlayOneShot(clip);
         }
 
         public bool IsPlaying()
         {
             if (childContainers.Count == 0)
             {
-                return audioSource.isPlaying;
+                return associatedMapper.personalAudioSource.isPlaying;
             }
             else
             {
