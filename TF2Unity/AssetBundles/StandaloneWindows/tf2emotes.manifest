@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3798248720
+CRC: 1278409353
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 564c5ce6d68096c40806dfc23cb0e385
+    Hash: a81c47c81318d6eab4c8da9fd096eb68
   TypeTreeHash:
     serializedVersion: 2
     Hash: 302ac61a30392ecc8d50ae6bf890367e
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 564c5ce6d68096c40806dfc23cb0e385
+    Hash: a81c47c81318d6eab4c8da9fd096eb68
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -81,8 +81,8 @@ Assets:
 - Assets/Conga/Pyro_Conga.anim
 - Assets/Engi/Rancho/engiRanchoBigDrink.anim
 - Assets/Spy/Laugh/Spy_Laugh.anim
-- Assets/Conga/Demo_Conga.anim
 - Assets/Pyro/Flip/Pyro_Flip_Start.anim
+- Assets/Conga/Demo_Conga.anim
 - Assets/Demo/Flip/Demo_Flip_Flip.anim
 - Assets/Pyro/RPS/PyroRPS_RLose.anim
 - Assets/RPS/Red_Scissors_Win.prefab
@@ -109,11 +109,12 @@ Assets:
 - Assets/Soldier/Flip/Soldier_Flip_Throw.anim
 - Assets/Conga/Engi_Conga.anim
 - Assets/Scout/RPS/ScoutRPS_Start.anim
-- Assets/Engi/Flip/Engi_Flip_Start.anim
+- Assets/lethalconfigicon.png
 - Assets/Soldier/RPS/SoldierRPS_Start.anim
-- Assets/Engi/Rancho/engiRanchoPassive.anim
+- Assets/Engi/Flip/Engi_Flip_Start.anim
 - Assets/Sniper/RPS/SniperRPS_PLose.anim
 - Assets/Demo/Flip/Demo_Flip_Wait.anim
+- Assets/Engi/Rancho/engiRanchoPassive.anim
 - Assets/Pyro/RPS/PyroRPS_PWin.anim
 - Assets/Sniper/RPS/SniperRPS_Loop.anim
 - Assets/KazotskyKick/Kazotsky_Soldier_Loop.anim

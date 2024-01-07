@@ -109,6 +109,7 @@ namespace TitanFall2Emotes
 
 
 
+
             //DEBUG();
             CustomEmotesAPI.animJoined += CustomEmotesAPI_animJoined;
             CustomEmotesAPI.animChanged += CustomEmotesAPI_animChanged;
@@ -701,11 +702,10 @@ namespace TitanFall2Emotes
                     i--;
                 }
             }
+
         }
         private void CustomEmotesAPI_animChanged(string newAnimation, BoneMapper mapper)
         {
-            DebugClass.Log($"newanimation is {newAnimation}");
-
             if (!mapper.gameObject.GetComponent<TF2EmoteTracker>())
             {
                 mapper.gameObject.AddComponent<TF2EmoteTracker>();
