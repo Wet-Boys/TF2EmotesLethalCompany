@@ -23,6 +23,7 @@ namespace TitanFall2Emotes
             g.transform.localPosition = joinerMapper.transform.position;
             g.transform.localEulerAngles = joinerMapper.transform.eulerAngles;
             g.transform.localScale = Vector3.one;
+            g.transform.SetParent(joinerMapper.mapperBodyTransform.parent);
             joinerMapper.AssignParentGameObject(g, true, true, true, true, false);
 
         }
@@ -41,7 +42,7 @@ namespace TitanFall2Emotes
             g.transform.localPosition = new Vector3(0, 0, 1.95f / scal.z);
             g.transform.localEulerAngles = new Vector3(0, 180, 0);
             g.transform.localScale = Vector3.one;
-            g.transform.SetParent(null);
+            g.transform.SetParent(joinerMapper.mapperBodyTransform.parent);
             joinerMapper.AssignParentGameObject(g, true, true, true, true, true);
             //hostJoinerMapper.transform.parent.localScale = scale;
         }
@@ -56,6 +57,7 @@ namespace TitanFall2Emotes
             g.transform.localPosition = joinerMapper.transform.position;
             g.transform.localEulerAngles = joinerMapper.transform.eulerAngles;
             g.transform.localScale = Vector3.one;
+            g.transform.SetParent(joinerMapper.mapperBodyTransform.parent);
             joinerMapper.AssignParentGameObject(g, true, true, true, true, false);
         }
         public static void Flip_Join(BoneMapper joinerMapper, int spot, BoneMapper hostJoinerMapper)

@@ -24,7 +24,7 @@ namespace TitanFall2Emotes
         public const string PluginGUID = "com.weliveinasociety.teamfortress2emotes";
         public const string PluginAuthor = "Nunchuk";
         public const string PluginName = "TF2Emotes";
-        public const string PluginVersion = "1.0.0";
+        public const string PluginVersion = "1.0.1";
         internal static List<string> Conga_Emotes = new List<string>();
         internal static List<string> KazotskyKick_Emotes = new List<string>();
         internal static List<string> RPS_Start_Emotes = new List<string>();
@@ -41,7 +41,7 @@ namespace TitanFall2Emotes
         private void PlayerControllerStart(Action<PlayerControllerB> orig, PlayerControllerB self)
         {
             orig(self);
-            if (self.IsServer && TF2Networker.instance is null)
+            if (self.IsServer && TF2Networker.instance == null)
             {
                 GameObject networker = Instantiate<GameObject>(tf2Networker);
                 networker.GetComponent<NetworkObject>().Spawn(true);
@@ -736,6 +736,7 @@ namespace TitanFall2Emotes
                     g.transform.localPosition = mapper.transform.position;
                     g.transform.localEulerAngles = mapper.transform.eulerAngles;
                     g.transform.localScale = Vector3.one;
+                    g.transform.SetParent(mapper.mapperBodyTransform.parent);
                     mapper.AssignParentGameObject(g, true, true, true, false, false);
                     chair.chair = g;
                     targetAudioThing = _play_rancho;
@@ -1107,6 +1108,7 @@ namespace TitanFall2Emotes
             if (targetAudioThing != -1)
             {
                 AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, targetAudioThing, mapper);
+                DebugClass.Log($"seggs");
             }
             if (targetAudioThing2 != -1)
             {

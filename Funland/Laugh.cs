@@ -17,6 +17,7 @@ namespace TitanFall2Emotes
             g.transform.localPosition = joinerMapper.transform.position;
             g.transform.localEulerAngles = joinerMapper.transform.eulerAngles;
             g.transform.localScale = Vector3.one;
+            g.transform.SetParent(joinerMapper.mapperBodyTransform.parent);
             joinerMapper.AssignParentGameObject(g, true, true, true, true, false);
         }
     }

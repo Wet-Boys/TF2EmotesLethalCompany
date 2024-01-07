@@ -22,6 +22,7 @@ namespace TitanFall2Emotes
             g.transform.localPosition = joinerMapper.transform.position;
             g.transform.localEulerAngles = joinerMapper.transform.eulerAngles;
             g.transform.localScale = Vector3.one;
+            g.transform.SetParent(joinerMapper.mapperBodyTransform.parent);
             joinerMapper.AssignParentGameObject(g, true, true, false, false, false);
         }
         public static void RPSWin(BoneMapper joinerMapper, int spot, BoneMapper hostJoinerMapper, bool joinerPlayer, bool hostPlayer)
@@ -38,6 +39,7 @@ namespace TitanFall2Emotes
                 g.transform.localPosition = new Vector3(0, 0, 2.5f / scal.z);
                 g.transform.localEulerAngles = new Vector3(0, 180, 0);
                 g.transform.localScale = Vector3.one;
+                g.transform.SetParent(joinerMapper.mapperBodyTransform.parent);
                 joinerMapper.AssignParentGameObject(g, true, true, false, false, true);
             }
             else
@@ -45,6 +47,7 @@ namespace TitanFall2Emotes
                 g.transform.localPosition = joinerMapper.transform.position;
                 g.transform.localEulerAngles = joinerMapper.transform.eulerAngles;
                 g.transform.localScale = Vector3.one;
+                g.transform.SetParent(joinerMapper.mapperBodyTransform.parent);
                 joinerMapper.AssignParentGameObject(g, true, true, false, false, false);
             }
 
@@ -91,6 +94,7 @@ namespace TitanFall2Emotes
                 g.transform.localPosition = new Vector3(0, 0, 2.5f / scal.z);
                 g.transform.localEulerAngles = new Vector3(0, 180, 0);
                 g.transform.localScale = Vector3.one;
+                g.transform.SetParent(joinerMapper.mapperBodyTransform.parent);
                 joinerMapper.AssignParentGameObject(g, true, true, false, false, true);
             }
             else
@@ -98,6 +102,7 @@ namespace TitanFall2Emotes
                 g.transform.localPosition = joinerMapper.transform.position;
                 g.transform.localEulerAngles = joinerMapper.transform.eulerAngles;
                 g.transform.localScale = Vector3.one;
+                g.transform.SetParent(joinerMapper.mapperBodyTransform.parent);
                 joinerMapper.AssignParentGameObject(g, true, true, false, false, false);
             }
 
