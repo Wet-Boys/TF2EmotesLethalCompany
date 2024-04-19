@@ -59,9 +59,10 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy /y &quot;C:\Users\Bigma Male\Documents\TF2EmotesLethalCompany\Funland\bin\Debug\netstandard2.1\TitanFall2Emotes.dll&quot; &quot;G:\networkpatcher\plugins\TitanFall2Emotes.dll&quot;" />
     <Exec Command="copy /y &quot;C:\Users\Bigma Male\Documents\TF2EmotesLethalCompany\Funland\bin\Debug\netstandard2.1\TitanFall2Emotes.pdb&quot; &quot;G:\networkpatcher\plugins\TitanFall2Emotes.pdb&quot;" />
-    <Exec Command="&quot;G:\networkpatcher\NetcodePatcher.dll&quot; &quot;G:/networkpatcher/plugins/&quot; &quot;G:/networkpatcher/deps/&quot;" />
+    <Exec Command="&quot;G:\networkpatcher\NetcodePatcher.Cli.exe&quot; &quot;G:/networkpatcher/plugins/&quot; &quot;G:/networkpatcher/deps/&quot;" />
 
-    <Exec Command="copy /y &quot;G:\networkpatcher\plugins\TitanFall2Emotes.dll&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Lethal Company\BepInEx\plugins\TitanFall2Emotes\TitanFall2Emotes.dll&quot;" />
+    <Exec Command="copy /y &quot;G:\networkpatcher\plugins\TitanFall2Emotes.dll&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Lethal Company\BepInEx\plugins\Gemumoddo-Tf2Emotes\TitanFall2Emotes.dll&quot;" />
+    
       
   </Target>
 

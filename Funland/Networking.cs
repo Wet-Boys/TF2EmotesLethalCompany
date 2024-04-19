@@ -26,18 +26,18 @@ namespace TitanFall2Emotes
             BoneMapper joinerMapper = bodyObject.GetComponentInChildren<BoneMapper>();
             GameObject hostBodyObject = GetNetworkObject(secondaryNetId).gameObject;
             BoneMapper hostJoinerMapper = hostBodyObject.GetComponentInChildren<BoneMapper>();
-            bool joinerPlayer = bodyObject.GetComponents<PlayerControllerB>().Length == 1;
-            bool hostPlayer = hostBodyObject.GetComponents<PlayerControllerB>().Length == 1;
+            bool joinerIsEnemy = bodyObject.GetComponents<EnemyAI>().Length == 1;
+            bool hostAndJoinerAreDifferentTeams = (bodyObject.GetComponents<EnemyAI>().Length == 1 && hostBodyObject.GetComponents<PlayerControllerB>().Length == 1) || (bodyObject.GetComponents<PlayerControllerB>().Length == 1 && hostBodyObject.GetComponents<EnemyAI>().Length == 1);
             switch (name)
             {
                 case "RPS_Start":
                     RockPaperScissors.RPSStart(joinerMapper, spot);
                     break;
                 case "RPS_Win":
-                    RockPaperScissors.RPSWin(joinerMapper, spot, hostJoinerMapper, joinerPlayer, hostPlayer);
+                    RockPaperScissors.RPSWin(joinerMapper, spot, hostJoinerMapper, joinerIsEnemy);
                     break;
                 case "RPS_Loss":
-                    RockPaperScissors.RPSLose(joinerMapper, spot, hostJoinerMapper, joinerPlayer, hostPlayer);
+                    RockPaperScissors.RPSLose(joinerMapper, spot, hostJoinerMapper, joinerIsEnemy, hostAndJoinerAreDifferentTeams);
                     break;
                 case "Flip_Wait":
                     Flip.FlipWait(joinerMapper, spot);
@@ -59,6 +59,7 @@ namespace TitanFall2Emotes
                     break;
                 default:
                     break;
+
             }
         }
 

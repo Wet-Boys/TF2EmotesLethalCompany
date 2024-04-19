@@ -2,12 +2,14 @@ using BepInEx;
 using BepInEx.Configuration;
 using EmotesAPI;
 using GameNetcodeStuff;
+using LethalEmotesAPI.ImportV2;
 using Mono.Cecil;
 using MonoMod.RuntimeDetour;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using TitanFall2Emotes.IMissWwise;
 using Unity.Netcode;
@@ -24,7 +26,7 @@ namespace TitanFall2Emotes
         public const string PluginGUID = "com.weliveinasociety.teamfortress2emotes";
         public const string PluginAuthor = "Nunchuk";
         public const string PluginName = "TF2Emotes";
-        public const string PluginVersion = "1.0.1";
+        public const string PluginVersion = "1.0.7";
         internal static List<string> Conga_Emotes = new List<string>();
         internal static List<string> KazotskyKick_Emotes = new List<string>();
         internal static List<string> RPS_Start_Emotes = new List<string>();
@@ -46,19 +48,27 @@ namespace TitanFall2Emotes
                 GameObject networker = Instantiate<GameObject>(tf2Networker);
                 networker.GetComponent<NetworkObject>().Spawn(true);
             }
-            if (AudioContainerHolder.instance is null)
+            if (AudioContainerHolder.instance == null)
             {
-                self.gameObject.AddComponent<AudioContainerHolder>();
+                GameObject ligmaBalls = new GameObject();
+                ligmaBalls.AddComponent<AudioContainerHolder>();
             }
         }
         private static Hook playerControllerStartHook;
         private void NetworkManagerStart(Action<GameNetworkManager> orig, GameNetworkManager self)
         {
-            orig(self);
-            tf2Networker = Assets.Load<GameObject>($"tf2222networker.prefab");
+            try
+            {
+                tf2Networker = Assets.Load<GameObject>($"tf2222networker.prefab");
 
-            tf2Networker.AddComponent<TF2Networker>();
-            GameNetworkManager.Instance.GetComponent<NetworkManager>().PrefabHandler.AddNetworkPrefab(tf2Networker);
+                tf2Networker.AddComponent<TF2Networker>();
+                GameNetworkManager.Instance.GetComponent<NetworkManager>().PrefabHandler.AddNetworkPrefab(tf2Networker);
+            }
+            catch (Exception e)
+            {
+                DebugClass.Log($"couldn't setup tf2 networker");
+            }
+            orig(self);
         }
         private static Hook networkManagerStartHook;
 
@@ -304,127 +314,130 @@ namespace TitanFall2Emotes
         {
             return AudioContainerHolder.Setup(audioClipNames, delays, repeatTimer);
         }
+        string prevAnimation;
         public void Rancho()
         {
-            AddAnimation("Engi/Rancho/RanchoRelaxo", null, "Engi/Rancho/engiRanchoPassive", false, false, "Rancho Relaxo");
-            AddAnimation("Engi/Rancho/engiRanchoBurp", "", "Engi/Rancho/engiRanchoPassive", false, false, false, "Rancho Relaxo");
-            AddAnimation("Engi/Rancho/engiRanchoBigDrink", "", "Engi/Rancho/engiRanchoPassive", false, false, false, "Rancho Relaxo");
-            AddAnimation("Engi/Rancho/engiRanchoQuickDrink", "", "Engi/Rancho/engiRanchoPassive", false, false, false, "Rancho Relaxo");
+            AddAnimation("Engi/Rancho/RanchoRelaxo", null, "Engi/Rancho/engiRanchoPassive", false, false, "Rancho Relaxo", false);
+            prevAnimation = BoneMapper.animClips.Last().Key;
+            AddAnimation("Engi/Rancho/engiRanchoBurp", "", "Engi/Rancho/engiRanchoPassive", false, false, false, "Rancho Relaxo", true);
+            AddAnimation("Engi/Rancho/engiRanchoBigDrink", "", "Engi/Rancho/engiRanchoPassive", false, false, false, "Rancho Relaxo", true);
+            AddAnimation("Engi/Rancho/engiRanchoQuickDrink", "", "Engi/Rancho/engiRanchoPassive", false, false, false, "Rancho Relaxo", true);
         }
         public void Laugh()
         {
             CustomEmotesAPI.AddNonAnimatingEmote("Schadenfreude");
-            string emote = AddHiddenAnimation(new string[] { "Demo/Laugh/Demo_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Demoman_laughlong02.ogg")], "Schadenfreude");
+            prevAnimation = "Schadenfreude";
+            string emote = AddHiddenAnimation(new string[] { "Demo/Laugh/Demo_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Demoman_laughlong02.ogg")], "Schadenfreude", true);
             Laugh_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Engi/Laugh/Engi_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Engineer_laughlong02.ogg")], "Schadenfreude");
+            emote = AddHiddenAnimation(new string[] { "Engi/Laugh/Engi_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Engineer_laughlong02.ogg")], "Schadenfreude", true);
             Laugh_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Heavy/Laugh/Heavy_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Heavy_laugherbigsnort01.ogg")], "Schadenfreude");
+            emote = AddHiddenAnimation(new string[] { "Heavy/Laugh/Heavy_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Heavy_laugherbigsnort01.ogg")], "Schadenfreude", true);
             Laugh_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Medic/Laugh/Medic_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Medic_laughlong01.ogg")], "Schadenfreude");
+            emote = AddHiddenAnimation(new string[] { "Medic/Laugh/Medic_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Medic_laughlong01.ogg")], "Schadenfreude", true);
             Laugh_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Pyro/Laugh/Pyro_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Pyro_laugh_addl04.ogg")], "Schadenfreude");
+            emote = AddHiddenAnimation(new string[] { "Pyro/Laugh/Pyro_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Pyro_laugh_addl04.ogg")], "Schadenfreude", true);
             Laugh_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Scout/Laugh/Scout_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Scout_laughlong02.ogg")], "Schadenfreude");
+            emote = AddHiddenAnimation(new string[] { "Scout/Laugh/Scout_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Scout_laughlong02.ogg")], "Schadenfreude", true);
             Laugh_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Sniper/Laugh/Sniper_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Sniper_laughlong02.ogg")], "Schadenfreude");
+            emote = AddHiddenAnimation(new string[] { "Sniper/Laugh/Sniper_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Sniper_laughlong02.ogg")], "Schadenfreude", true);
             Laugh_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Soldier/Laugh/Soldier_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Soldier_laughlong03.ogg")], "Schadenfreude");
+            emote = AddHiddenAnimation(new string[] { "Soldier/Laugh/Soldier_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Soldier_laughlong03.ogg")], "Schadenfreude", true);
             Laugh_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Spy/Laugh/Spy_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Spy_laughlong01.ogg")], "Schadenfreude");
+            emote = AddHiddenAnimation(new string[] { "Spy/Laugh/Spy_Laugh" }, [Assets.Load<AudioClip>($"assets/audio dump/Spy_laughlong01.ogg")], "Schadenfreude", true);
             Laugh_Emotes.Add(emote);
 
         }
         public void Flip()
         {
             CustomEmotesAPI.AddNonAnimatingEmote("Flippin' Awesome");
+            prevAnimation = "Flippin' Awesome";
 
-
-            string emote = AddHiddenAnimation(new string[] { "Demo/Flip/Demo_Flip_Start" }, new string[] { "Demo/Flip/Demo_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome");
+            string emote = AddHiddenAnimation(new string[] { "Demo/Flip/Demo_Flip_Start" }, new string[] { "Demo/Flip/Demo_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome", true);
             Flip_Wait_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Demo/Flip/Demo_Flip_Throw" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Demo/Flip/Demo_Flip_Throw" }, "Flippin' Awesome", true);
             Flip_Throw_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Demo/Flip/Demo_Flip_Flip" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Demo/Flip/Demo_Flip_Flip" }, "Flippin' Awesome", true);
             Flip_Flip_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Engi/Flip/Engi_Flip_Start" }, new string[] { "Engi/Flip/Engi_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Engi/Flip/Engi_Flip_Start" }, new string[] { "Engi/Flip/Engi_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome", true);
             Flip_Wait_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Engi/Flip/Engi_Flip_Throw" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Engi/Flip/Engi_Flip_Throw" }, "Flippin' Awesome", true);
             Flip_Throw_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Engi/Flip/Engi_Flip_Flip" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Engi/Flip/Engi_Flip_Flip" }, "Flippin' Awesome", true);
             Flip_Flip_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Heavy/Flip/Heavy_Flip_Start" }, new string[] { "Heavy/Flip/Heavy_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Heavy/Flip/Heavy_Flip_Start" }, new string[] { "Heavy/Flip/Heavy_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome", true);
             Flip_Wait_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Heavy/Flip/Heavy_Flip_Throw" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Heavy/Flip/Heavy_Flip_Throw" }, "Flippin' Awesome", true);
             Flip_Throw_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Heavy/Flip/Heavy_Flip_Flip" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Heavy/Flip/Heavy_Flip_Flip" }, "Flippin' Awesome", true);
             Flip_Flip_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Medic/Flip/Medic_Flip_Start" }, new string[] { "Medic/Flip/Medic_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Medic/Flip/Medic_Flip_Start" }, new string[] { "Medic/Flip/Medic_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome", true);
             Flip_Wait_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Medic/Flip/Medic_Flip_Throw" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Medic/Flip/Medic_Flip_Throw" }, "Flippin' Awesome", true);
             Flip_Throw_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Medic/Flip/Medic_Flip_Flip" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Medic/Flip/Medic_Flip_Flip" }, "Flippin' Awesome", true);
             Flip_Flip_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Pyro/Flip/Pyro_Flip_Start" }, new string[] { "Pyro/Flip/Pyro_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Pyro/Flip/Pyro_Flip_Start" }, new string[] { "Pyro/Flip/Pyro_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome", true);
             Flip_Wait_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Pyro/Flip/Pyro_Flip_Throw" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Pyro/Flip/Pyro_Flip_Throw" }, "Flippin' Awesome", true);
             Flip_Throw_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Pyro/Flip/Pyro_Flip_Flip" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Pyro/Flip/Pyro_Flip_Flip" }, "Flippin' Awesome", true);
             Flip_Flip_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Scout/Flip/Scout_Flip_Start" }, new string[] { "Scout/Flip/Scout_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Scout/Flip/Scout_Flip_Start" }, new string[] { "Scout/Flip/Scout_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome", true);
             Flip_Wait_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Scout/Flip/Scout_Flip_Throw" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Scout/Flip/Scout_Flip_Throw" }, "Flippin' Awesome", true);
             Flip_Throw_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Scout/Flip/Scout_Flip_Flip" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Scout/Flip/Scout_Flip_Flip" }, "Flippin' Awesome", true);
             Flip_Flip_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Sniper/Flip/Sniper_Flip_Start" }, new string[] { "Sniper/Flip/Sniper_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Sniper/Flip/Sniper_Flip_Start" }, new string[] { "Sniper/Flip/Sniper_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome", true);
             Flip_Wait_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Sniper/Flip/Sniper_Flip_Throw" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Sniper/Flip/Sniper_Flip_Throw" }, "Flippin' Awesome", true);
             Flip_Throw_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Sniper/Flip/Sniper_Flip_Flip" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Sniper/Flip/Sniper_Flip_Flip" }, "Flippin' Awesome", true);
             Flip_Flip_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Soldier/Flip/Soldier_Flip_Start" }, new string[] { "Soldier/Flip/Soldier_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Soldier/Flip/Soldier_Flip_Start" }, new string[] { "Soldier/Flip/Soldier_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome", true);
             Flip_Wait_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Soldier/Flip/Soldier_Flip_Throw" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Soldier/Flip/Soldier_Flip_Throw" }, "Flippin' Awesome", true);
             Flip_Throw_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Soldier/Flip/Soldier_Flip_Flip" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Soldier/Flip/Soldier_Flip_Flip" }, "Flippin' Awesome", true);
             Flip_Flip_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Spy/Flip/Spy_Flip_Start" }, new string[] { "Spy/Flip/Spy_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Spy/Flip/Spy_Flip_Start" }, new string[] { "Spy/Flip/Spy_Flip_Wait" }, new JoinSpot[] { new JoinSpot("FlipJoinSpot", new Vector3(0, 0, 1.5f)) }, "Flippin' Awesome", true);
             Flip_Wait_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Spy/Flip/Spy_Flip_Throw" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Spy/Flip/Spy_Flip_Throw" }, "Flippin' Awesome", true);
             Flip_Throw_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Spy/Flip/Spy_Flip_Flip" }, "Flippin' Awesome");
+            emote = AddHiddenAnimation(new string[] { "Spy/Flip/Spy_Flip_Flip" }, "Flippin' Awesome", true);
             Flip_Flip_Emotes.Add(emote);
         }
         public void RPS()
@@ -434,206 +447,208 @@ namespace TitanFall2Emotes
             //CustomEmotesAPI.AddNonAnimatingEmote("Rock", false);
             //CustomEmotesAPI.AddNonAnimatingEmote("Paper", false);
             //CustomEmotesAPI.AddNonAnimatingEmote("Scissors", false);
-            string emote = AddHiddenAnimation(new string[] { "Demo/RPS/DemoRPS_Start" }, new string[] { "Demo/RPS/DemoRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors");
+            prevAnimation = "Rock Paper Scissors";
+            string emote = AddHiddenAnimation(new string[] { "Demo/RPS/DemoRPS_Start" }, new string[] { "Demo/RPS/DemoRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors", true);
             RPS_Start_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Demo/RPS/DemoRPS_RWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Demo/RPS/DemoRPS_RWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Demo/RPS/DemoRPS_RLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Demo/RPS/DemoRPS_RLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Demo/RPS/DemoRPS_PWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Demo/RPS/DemoRPS_PWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Demo/RPS/DemoRPS_PLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Demo/RPS/DemoRPS_PLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Demo/RPS/DemoRPS_SWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Demo/RPS/DemoRPS_SWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Demo/RPS/DemoRPS_SLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Demo/RPS/DemoRPS_SLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Engi/RPS/EngiRPSStart" }, new string[] { "Engi/RPS/EngiRPSLoop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Engi/RPS/EngiRPSStart" }, new string[] { "Engi/RPS/EngiRPSLoop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors", true);
             RPS_Start_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Engi/RPS/EngiRPS_RWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Engi/RPS/EngiRPS_RWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Engi/RPS/EngiRPS_RLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Engi/RPS/EngiRPS_RLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Engi/RPS/EngiRPS_PWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Engi/RPS/EngiRPS_PWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Engi/RPS/EngiRPS_PLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Engi/RPS/EngiRPS_PLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Engi/RPS/EngiRPS_SWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Engi/RPS/EngiRPS_SWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Engi/RPS/EngiRPS_SLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Engi/RPS/EngiRPS_SLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Heavy/RPS/HeavyRPS_Start" }, new string[] { "Heavy/RPS/HeavyRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Heavy/RPS/HeavyRPS_Start" }, new string[] { "Heavy/RPS/HeavyRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors", true);
             RPS_Start_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Heavy/RPS/HeavyRPS_RWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Heavy/RPS/HeavyRPS_RWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Heavy/RPS/HeavyRPS_RLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Heavy/RPS/HeavyRPS_RLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Heavy/RPS/HeavyRPS_PWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Heavy/RPS/HeavyRPS_PWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Heavy/RPS/HeavyRPS_PLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Heavy/RPS/HeavyRPS_PLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Heavy/RPS/HeavyRPS_SWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Heavy/RPS/HeavyRPS_SWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Heavy/RPS/HeavyRPS_SLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Heavy/RPS/HeavyRPS_SLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Medic/RPS/MedicRPS_Start" }, new string[] { "Medic/RPS/MedicRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Medic/RPS/MedicRPS_Start" }, new string[] { "Medic/RPS/MedicRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors", true);
             RPS_Start_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Medic/RPS/MedicRPS_RWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Medic/RPS/MedicRPS_RWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Medic/RPS/MedicRPS_RLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Medic/RPS/MedicRPS_RLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Medic/RPS/MedicRPS_PWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Medic/RPS/MedicRPS_PWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Medic/RPS/MedicRPS_PLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Medic/RPS/MedicRPS_PLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Medic/RPS/MedicRPS_SWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Medic/RPS/MedicRPS_SWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Medic/RPS/MedicRPS_SLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Medic/RPS/MedicRPS_SLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Pyro/RPS/PyroRPS_Start" }, new string[] { "Pyro/RPS/PyroRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Pyro/RPS/PyroRPS_Start" }, new string[] { "Pyro/RPS/PyroRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors", true);
             RPS_Start_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Pyro/RPS/PyroRPS_RWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Pyro/RPS/PyroRPS_RWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Pyro/RPS/PyroRPS_RLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Pyro/RPS/PyroRPS_RLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Pyro/RPS/PyroRPS_PWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Pyro/RPS/PyroRPS_PWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Pyro/RPS/PyroRPS_PLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Pyro/RPS/PyroRPS_PLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Pyro/RPS/PyroRPS_SWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Pyro/RPS/PyroRPS_SWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Pyro/RPS/PyroRPS_SLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Pyro/RPS/PyroRPS_SLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Scout/RPS/ScoutRPS_Start" }, new string[] { "Scout/RPS/ScoutRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Scout/RPS/ScoutRPS_Start" }, new string[] { "Scout/RPS/ScoutRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors", true);
             RPS_Start_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Scout/RPS/ScoutRPS_RWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Scout/RPS/ScoutRPS_RWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Scout/RPS/ScoutRPS_RLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Scout/RPS/ScoutRPS_RLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Scout/RPS/ScoutRPS_PWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Scout/RPS/ScoutRPS_PWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Scout/RPS/ScoutRPS_PLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Scout/RPS/ScoutRPS_PLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Scout/RPS/ScoutRPS_SWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Scout/RPS/ScoutRPS_SWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Scout/RPS/ScoutRPS_SLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Scout/RPS/ScoutRPS_SLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Sniper/RPS/SniperRPS_Start" }, new string[] { "Sniper/RPS/SniperRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Sniper/RPS/SniperRPS_Start" }, new string[] { "Sniper/RPS/SniperRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors", true);
             RPS_Start_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Sniper/RPS/SniperRPS_RWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Sniper/RPS/SniperRPS_RWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Sniper/RPS/SniperRPS_RLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Sniper/RPS/SniperRPS_RLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Sniper/RPS/SniperRPS_PWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Sniper/RPS/SniperRPS_PWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Sniper/RPS/SniperRPS_PLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Sniper/RPS/SniperRPS_PLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Sniper/RPS/SniperRPS_SWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Sniper/RPS/SniperRPS_SWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Sniper/RPS/SniperRPS_SLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Sniper/RPS/SniperRPS_SLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Soldier/RPS/SoldierRPS_Start" }, new string[] { "Soldier/RPS/SoldierRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Soldier/RPS/SoldierRPS_Start" }, new string[] { "Soldier/RPS/SoldierRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors", true);
             RPS_Start_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Soldier/RPS/SoldierRPS_RWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Soldier/RPS/SoldierRPS_RWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Soldier/RPS/SoldierRPS_RLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Soldier/RPS/SoldierRPS_RLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Soldier/RPS/SoldierRPS_PWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Soldier/RPS/SoldierRPS_PWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Soldier/RPS/SoldierRPS_PLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Soldier/RPS/SoldierRPS_PLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Soldier/RPS/SoldierRPS_SWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Soldier/RPS/SoldierRPS_SWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Soldier/RPS/SoldierRPS_SLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Soldier/RPS/SoldierRPS_SLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
 
-            emote = AddHiddenAnimation(new string[] { "Spy/RPS/SpyRPS_Start" }, new string[] { "Spy/RPS/SpyRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Spy/RPS/SpyRPS_Start" }, new string[] { "Spy/RPS/SpyRPS_Loop" }, new JoinSpot[] { new JoinSpot("RPSJoinSpot", new Vector3(0, 0, 1.5f)) }, "Rock Paper Scissors", true);
             RPS_Start_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Spy/RPS/SpyRPS_RWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Spy/RPS/SpyRPS_RWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Spy/RPS/SpyRPS_RLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Spy/RPS/SpyRPS_RLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Spy/RPS/SpyRPS_PWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Spy/RPS/SpyRPS_PWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Spy/RPS/SpyRPS_PLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Spy/RPS/SpyRPS_PLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
 
-            emote = AddHiddenAnimation(new string[] { "Spy/RPS/SpyRPS_SWin" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Spy/RPS/SpyRPS_SWin" }, "Rock Paper Scissors", true);
             RPS_Win_Emotes.Add(emote);
-            emote = AddHiddenAnimation(new string[] { "Spy/RPS/SpyRPS_SLose" }, "Rock Paper Scissors");
+            emote = AddHiddenAnimation(new string[] { "Spy/RPS/SpyRPS_SLose" }, "Rock Paper Scissors", true);
             RPS_Loss_Emotes.Add(emote);
         }
         public void KazotskyKick()
         {
             CustomEmotesAPI.AddNonAnimatingEmote("Kazotsky Kick");
             CustomEmotesAPI.BlackListEmote("Kazotsky Kick");
+            prevAnimation = "Kazotsky Kick";
             string emote;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Demo_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Demo_Loop" }, "Kazotsky Kick"); //names are wrong, should be Kazotsky_Sniper_Loop
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Demo_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Demo_Loop" }, "Kazotsky Kick", true); //names are wrong, should be Kazotsky_Sniper_Loop
             KazotskyKick_Emotes.Add(emote);
             int syncpos = BoneMapper.animClips[emote].syncPos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Engi_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Engi_Loop" }, "Kazotsky Kick");
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Engi_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Engi_Loop" }, "Kazotsky Kick", true);
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Heavy_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Heavy_Loop" }, "Kazotsky Kick");
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Heavy_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Heavy_Loop" }, "Kazotsky Kick", true);
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Medic_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Medic_Loop" }, "Kazotsky Kick");
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Medic_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Medic_Loop" }, "Kazotsky Kick", true);
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Pyro_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Pyro_Loop" }, "Kazotsky Kick");
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Pyro_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Pyro_Loop" }, "Kazotsky Kick", true);
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Scout_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Scout_Loop" }, "Kazotsky Kick");
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Scout_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Scout_Loop" }, "Kazotsky Kick", true);
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Sniper_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Sniper_Loop" }, "Kazotsky Kick");
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Sniper_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Sniper_Loop" }, "Kazotsky Kick", true);
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Soldier_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Soldier_Loop" }, "Kazotsky Kick");
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Soldier_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Soldier_Loop" }, "Kazotsky Kick", true);
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Spy_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Spy_Loop" }, "Kazotsky Kick");
+            emote = AddHiddenAnimation(new string[] { "KazotskyKick/Kazotsky_Spy_Start" }, [Assets.Load<AudioClip>($"assets/audio dump/KazotskyKick.ogg")], true, new string[] { "KazotskyKick/Kazotsky_Spy_Loop" }, "Kazotsky Kick", true);
             KazotskyKick_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
         }
@@ -641,33 +656,33 @@ namespace TitanFall2Emotes
         {
             CustomEmotesAPI.AddNonAnimatingEmote("Conga");
             CustomEmotesAPI.BlackListEmote("Conga");
-
+            prevAnimation = "Conga";
             string emote;
-            emote = AddHiddenAnimation(new string[] { "Conga/Demo_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga");
+            emote = AddHiddenAnimation(new string[] { "Conga/Demo_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga", true);
             Conga_Emotes.Add(emote);
             int syncpos = BoneMapper.animClips[emote].syncPos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Engi_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga");
+            emote = AddHiddenAnimation(new string[] { "Conga/Engi_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga", true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Heavy_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga");
+            emote = AddHiddenAnimation(new string[] { "Conga/Heavy_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga", true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Medic_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga");
+            emote = AddHiddenAnimation(new string[] { "Conga/Medic_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga", true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Pyro_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga");
+            emote = AddHiddenAnimation(new string[] { "Conga/Pyro_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga", true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Scout_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga");
+            emote = AddHiddenAnimation(new string[] { "Conga/Scout_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga", true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Sniper_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga");
+            emote = AddHiddenAnimation(new string[] { "Conga/Sniper_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga", true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Soldier_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga");
+            emote = AddHiddenAnimation(new string[] { "Conga/Soldier_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga", true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
-            emote = AddHiddenAnimation(new string[] { "Conga/Spy_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga");
+            emote = AddHiddenAnimation(new string[] { "Conga/Spy_Conga" }, [Assets.Load<AudioClip>($"assets/audio dump/conga.ogg")], true, "Conga", true);
             Conga_Emotes.Add(emote);
             BoneMapper.animClips[emote].syncPos = syncpos;
         }
@@ -715,11 +730,11 @@ namespace TitanFall2Emotes
             StopAudioContainerStuff(mapper);
             switch (newAnimation)
             {
-                case "RanchoRelaxo":
+                case $"{TF2Plugin.PluginGUID}__RanchoRelaxo":
                     GameObject g = GameObject.Instantiate(Assets.Load<GameObject>("@BadAssEmotes_badassemotes:Assets/Engi/Rancho/RanchoRelaxo.prefab"));
                     mapper.props.Add(g);
-                    g.transform.SetParent(mapper.transform.parent);
-                    g.transform.localEulerAngles = new Vector3(90, 0, 0);
+                    g.transform.SetParent(mapper.mapperBody.transform);
+                    g.transform.localEulerAngles = new Vector3(0, 0, 0);
                     g.transform.localPosition = Vector3.zero;
                     g.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
                     mapper.ScaleProps();
@@ -737,39 +752,39 @@ namespace TitanFall2Emotes
                     g.transform.localEulerAngles = mapper.transform.eulerAngles;
                     g.transform.localScale = Vector3.one;
                     g.transform.SetParent(mapper.mapperBodyTransform.parent);
-                    mapper.AssignParentGameObject(g, true, true, true, false, false);
+                    mapper.AssignParentGameObject(g, false, false, true, false, false);
                     chair.chair = g;
                     targetAudioThing = _play_rancho;
                     break;
                 case "Rock Paper Scissors":
-                    if (mapper.local)
+                    if (mapper.local || mapper.isEnemy)
                     {
                         TF2Networker.instance.SyncEmoteToServerRpc(mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId, "RPS_Start", GetMercNumber(), mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId);
                     }
 
                     break;
                 case "Flippin' Awesome":
-                    if (mapper.local)
+                    if (mapper.local || mapper.isEnemy)
                     {
                         TF2Networker.instance.SyncEmoteToServerRpc(mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId, "Flip_Wait", GetMercNumber(), mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId);
                     }
                     break;
                 case "Conga":
-                    if (mapper.local)
+                    if (mapper.local || mapper.isEnemy)
                     {
                         mapper.gameObject.GetComponent<TF2EmoteTracker>().currentAnimation = "Medic_Conga";
                         TF2Networker.instance.SyncEmoteToServerRpc(mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId, "Conga_Start", GetMercNumber(), mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId);
                     }
                     break;
                 case "Kazotsky Kick":
-                    if (mapper.local)
+                    if (mapper.local || mapper.isEnemy)
                     {
                         mapper.gameObject.GetComponent<TF2EmoteTracker>().currentAnimation = "Medic_Kazotsky";
                         TF2Networker.instance.SyncEmoteToServerRpc(mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId, "Kazotsky_Start", GetMercNumber(), mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId);
                     }
                     break;
                 case "Schadenfreude":
-                    if (mapper.local)
+                    if (mapper.local || mapper.isEnemy)
                     {
                         mapper.gameObject.GetComponent<TF2EmoteTracker>().currentAnimation = "Medic_Laugh";
                         TF2Networker.instance.SyncEmoteToServerRpc(mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId, "Laugh_Start", GetMercNumber(), mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId);
@@ -777,101 +792,101 @@ namespace TitanFall2Emotes
                     break;
 
                 //Fleeeeep
-                case "Demo_Flip_Start":
+                case $"{TF2Plugin.PluginGUID}__Demo_Flip_Start":
                     targetAudioThing = _demo_flip_waiting;
                     break;
-                case "Demo_Flip_Throw":
+                case $"{TF2Plugin.PluginGUID}__Demo_Flip_Throw":
                     targetAudioThing = _demo_flip_throw;
                     break;
-                case "Demo_Flip_Flip":
+                case $"{TF2Plugin.PluginGUID}__Demo_Flip_Flip":
                     targetAudioThing = _demo_flip_flip;
                     break;
 
 
-                case "Engi_Flip_Start":
+                case $"{TF2Plugin.PluginGUID}__Engi_Flip_Start":
                     targetAudioThing = _engi_flip_waiting;
                     break;
-                case "Engi_Flip_Throw":
+                case $"{TF2Plugin.PluginGUID}__Engi_Flip_Throw":
                     targetAudioThing = _engi_flip_throw;
                     break;
-                case "Engi_Flip_Flip":
+                case $"{TF2Plugin.PluginGUID}__Engi_Flip_Flip":
                     targetAudioThing = _engi_flip_flip;
                     break;
 
 
-                case "Heavy_Flip_Start":
+                case $"{TF2Plugin.PluginGUID}__Heavy_Flip_Start":
                     targetAudioThing = _heavy_flip_waiting;
                     break;
-                case "Heavy_Flip_Throw":
+                case $"{TF2Plugin.PluginGUID}__Heavy_Flip_Throw":
                     targetAudioThing = _heavy_flip_throw;
                     break;
-                case "Heavy_Flip_Flip":
+                case $"{TF2Plugin.PluginGUID}__Heavy_Flip_Flip":
                     targetAudioThing = _heavy_flip_flip;
                     break;
 
 
-                case "Medic_Flip_Start":
+                case $"{TF2Plugin.PluginGUID}__Medic_Flip_Start":
                     targetAudioThing = _medic_flip_waiting;
                     break;
-                case "Medic_Flip_Throw":
+                case $"{TF2Plugin.PluginGUID}__Medic_Flip_Throw":
                     targetAudioThing = _medic_flip_throw;
                     break;
-                case "Medic_Flip_Flip":
+                case $"{TF2Plugin.PluginGUID}__Medic_Flip_Flip":
                     targetAudioThing = _medic_flip_flip;
                     break;
 
 
-                case "Pyro_Flip_Start":
+                case $"{TF2Plugin.PluginGUID}__Pyro_Flip_Start":
                     targetAudioThing = _pyro_flip_waiting;
                     break;
-                case "Pyro_Flip_Throw":
+                case $"{TF2Plugin.PluginGUID}__Pyro_Flip_Throw":
                     targetAudioThing = _pyro_flip_throw;
                     break;
-                case "Pyro_Flip_Flip":
+                case $"{TF2Plugin.PluginGUID}__Pyro_Flip_Flip":
                     targetAudioThing = _pyro_flip_flip;
                     break;
 
 
-                case "Scout_Flip_Start":
+                case $"{TF2Plugin.PluginGUID}__Scout_Flip_Start":
                     targetAudioThing = _scout_flip_waiting;
                     break;
-                case "Scout_Flip_Throw":
+                case $"{TF2Plugin.PluginGUID}__Scout_Flip_Throw":
                     targetAudioThing = _scout_flip_throw;
                     break;
-                case "Scout_Flip_Flip":
+                case $"{TF2Plugin.PluginGUID}__Scout_Flip_Flip":
                     targetAudioThing = _scout_flip_flip;
                     break;
 
 
-                case "Sniper_Flip_Start":
+                case $"{TF2Plugin.PluginGUID}__Sniper_Flip_Start":
                     targetAudioThing = _sniper_flip_waiting;
                     break;
-                case "Sniper_Flip_Throw":
+                case $"{TF2Plugin.PluginGUID}__Sniper_Flip_Throw":
                     targetAudioThing = _sniper_flip_throw;
                     break;
-                case "Sniper_Flip_Flip":
+                case $"{TF2Plugin.PluginGUID}__Sniper_Flip_Flip":
                     targetAudioThing = _sniper_flip_flip;
                     break;
 
 
-                case "Soldier_Flip_Start":
+                case $"{TF2Plugin.PluginGUID}__Soldier_Flip_Start":
                     targetAudioThing = _soldier_flip_waiting;
                     break;
-                case "Soldier_Flip_Throw":
+                case $"{TF2Plugin.PluginGUID}__Soldier_Flip_Throw":
                     targetAudioThing = _soldier_flip_throw;
                     break;
-                case "Soldier_Flip_Flip":
+                case $"{TF2Plugin.PluginGUID}__Soldier_Flip_Flip":
                     targetAudioThing = _soldier_flip_flip;
                     break;
 
 
-                case "Spy_Flip_Start":
+                case $"{TF2Plugin.PluginGUID}__Spy_Flip_Start":
                     targetAudioThing = _spy_flip_waiting;
                     break;
-                case "Spy_Flip_Throw":
+                case $"{TF2Plugin.PluginGUID}__Spy_Flip_Throw":
                     targetAudioThing = _spy_flip_throw;
                     break;
-                case "Spy_Flip_Flip":
+                case $"{TF2Plugin.PluginGUID}__Spy_Flip_Flip":
                     targetAudioThing = _spy_flip_flip;
                     break;
 
@@ -880,224 +895,224 @@ namespace TitanFall2Emotes
 
 
                 //RPS
-                case "EngiRPSStart":
+                case $"{TF2Plugin.PluginGUID}__EngiRPSStart":
                     targetAudioThing = _rps_engi_initiate;
                     break;
-                case "EngiRPS_RLose":
-                case "EngiRPS_PLose":
-                case "EngiRPS_SLose":
+                case $"{TF2Plugin.PluginGUID}__EngiRPS_RLose":
+                case $"{TF2Plugin.PluginGUID}__EngiRPS_PLose":
+                case $"{TF2Plugin.PluginGUID}__EngiRPS_SLose":
                     targetAudioThing = _rps_engi_loss;
                     break;
-                case "EngiRPS_RWin":
+                case $"{TF2Plugin.PluginGUID}__EngiRPS_RWin":
                     targetAudioThing = _rps_engi_winrock;
                     break;
-                case "EngiRPS_PWin":
+                case $"{TF2Plugin.PluginGUID}__EngiRPS_PWin":
                     targetAudioThing = _rps_engi_winpaper;
                     break;
-                case "EngiRPS_SWin":
+                case $"{TF2Plugin.PluginGUID}__EngiRPS_SWin":
                     targetAudioThing = _rps_engi_winscissors;
                     break;
 
 
-                case "DemoRPS_Start":
+                case $"{TF2Plugin.PluginGUID}__DemoRPS_Start":
                     targetAudioThing = _rps_demo_initiate;
                     break;
-                case "DemoRPS_RLose":
-                case "DemoRPS_PLose":
-                case "DemoRPS_SLose":
+                case $"{TF2Plugin.PluginGUID}__DemoRPS_RLose":
+                case $"{TF2Plugin.PluginGUID}__DemoRPS_PLose":
+                case $"{TF2Plugin.PluginGUID}__DemoRPS_SLose":
                     targetAudioThing = _rps_demo_loss;
                     break;
-                case "DemoRPS_RWin":
+                case $"{TF2Plugin.PluginGUID}__DemoRPS_RWin":
                     targetAudioThing = _rps_demo_winrock;
                     break;
-                case "DemoRPS_PWin":
+                case $"{TF2Plugin.PluginGUID}__DemoRPS_PWin":
                     targetAudioThing = _rps_demo_winpaper;
                     break;
-                case "DemoRPS_SWin":
+                case $"{TF2Plugin.PluginGUID}__DemoRPS_SWin":
                     targetAudioThing = _rps_demo_winscissors;
                     break;
 
 
-                case "HeavyRPS_Start":
+                case $"{TF2Plugin.PluginGUID}__HeavyRPS_Start":
                     targetAudioThing = _rps_heavy_initiate;
                     break;
-                case "HeavyRPS_RLose":
-                case "HeavyRPS_PLose":
-                case "HeavyRPS_SLose":
+                case $"{TF2Plugin.PluginGUID}__HeavyRPS_RLose":
+                case $"{TF2Plugin.PluginGUID}__HeavyRPS_PLose":
+                case $"{TF2Plugin.PluginGUID}__HeavyRPS_SLose":
                     targetAudioThing = _rps_heavy_loss;
                     break;
-                case "HeavyRPS_RWin":
+                case $"{TF2Plugin.PluginGUID}__HeavyRPS_RWin":
                     targetAudioThing = _rps_heavy_winrock;
                     break;
-                case "HeavyRPS_PWin":
+                case $"{TF2Plugin.PluginGUID}__HeavyRPS_PWin":
                     targetAudioThing = _rps_heavy_winpaper;
                     break;
-                case "HeavyRPS_SWin":
+                case $"{TF2Plugin.PluginGUID}__HeavyRPS_SWin":
                     targetAudioThing = _rps_heavy_winscissors;
                     break;
 
 
-                case "MedicRPS_Start":
+                case $"{TF2Plugin.PluginGUID}__MedicRPS_Start":
                     targetAudioThing = _rps_medic_initiate;
                     break;
-                case "MedicRPS_RLose":
-                case "MedicRPS_PLose":
-                case "MedicRPS_SLose":
+                case $"{TF2Plugin.PluginGUID}__MedicRPS_RLose":
+                case $"{TF2Plugin.PluginGUID}__MedicRPS_PLose":
+                case $"{TF2Plugin.PluginGUID}__MedicRPS_SLose":
                     targetAudioThing = _rps_medic_loss;
                     break;
-                case "MedicRPS_RWin":
+                case $"{TF2Plugin.PluginGUID}__MedicRPS_RWin":
                     targetAudioThing = _rps_medic_winrock;
                     break;
-                case "MedicRPS_PWin":
+                case $"{TF2Plugin.PluginGUID}__MedicRPS_PWin":
                     targetAudioThing = _rps_medic_winpaper;
                     break;
-                case "MedicRPS_SWin":
+                case $"{TF2Plugin.PluginGUID}__MedicRPS_SWin":
                     targetAudioThing = _rps_medic_winscissors;
                     break;
 
 
-                case "PyroRPS_Start":
+                case $"{TF2Plugin.PluginGUID}__PyroRPS_Start":
                     targetAudioThing = _rps_pyro_initiate;
                     break;
-                case "PyroRPS_RLose":
-                case "PyroRPS_PLose":
-                case "PyroRPS_SLose":
+                case $"{TF2Plugin.PluginGUID}__PyroRPS_RLose":
+                case $"{TF2Plugin.PluginGUID}__PyroRPS_PLose":
+                case $"{TF2Plugin.PluginGUID}__PyroRPS_SLose":
                     targetAudioThing = _rps_pyro_loss;
                     break;
-                case "PyroRPS_RWin":
+                case $"{TF2Plugin.PluginGUID}__PyroRPS_RWin":
                     targetAudioThing = _rps_pyro_winrock;
                     break;
-                case "PyroRPS_PWin":
+                case $"{TF2Plugin.PluginGUID}__PyroRPS_PWin":
                     targetAudioThing = _rps_pyro_winpaper;
                     break;
-                case "PyroRPS_SWin":
+                case $"{TF2Plugin.PluginGUID}__PyroRPS_SWin":
                     targetAudioThing = _rps_pyro_winscissors;
                     break;
 
 
-                case "ScoutRPS_Start":
+                case $"{TF2Plugin.PluginGUID}__ScoutRPS_Start":
                     targetAudioThing = _rps_scout_initiate;
                     break;
-                case "ScoutRPS_RLose":
+                case $"{TF2Plugin.PluginGUID}__ScoutRPS_RLose":
                     targetAudioThing = _rps_scout_lossrock;
                     break;
-                case "ScoutRPS_PLose":
-                case "ScoutRPS_SLose":
+                case $"{TF2Plugin.PluginGUID}__ScoutRPS_PLose":
+                case $"{TF2Plugin.PluginGUID}__ScoutRPS_SLose":
                     targetAudioThing = _rps_scout_loss;
                     break;
-                case "ScoutRPS_RWin":
+                case $"{TF2Plugin.PluginGUID}__ScoutRPS_RWin":
                     targetAudioThing = _rps_scout_winrock;
                     break;
-                case "ScoutRPS_PWin":
+                case $"{TF2Plugin.PluginGUID}__ScoutRPS_PWin":
                     targetAudioThing = _rps_scout_winpaper;
                     break;
-                case "ScoutRPS_SWin":
+                case $"{TF2Plugin.PluginGUID}__ScoutRPS_SWin":
                     targetAudioThing = _rps_scout_winscissors;
                     break;
 
 
-                case "SniperRPS_Start":
+                case $"{TF2Plugin.PluginGUID}__SniperRPS_Start":
                     AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, _rps_sniper_initiate_loop, mapper);
                     targetAudioThing = _rps_sniper_initiate_start;
                     break;
-                case "SniperRPS_RLose":
-                case "SniperRPS_PLose":
-                case "SniperRPS_SLose":
+                case $"{TF2Plugin.PluginGUID}__SniperRPS_RLose":
+                case $"{TF2Plugin.PluginGUID}__SniperRPS_PLose":
+                case $"{TF2Plugin.PluginGUID}__SniperRPS_SLose":
                     targetAudioThing = _rps_sniper_loss;
                     break;
-                case "SniperRPS_RWin":
+                case $"{TF2Plugin.PluginGUID}__SniperRPS_RWin":
                     targetAudioThing = _rps_sniper_winrock;
                     break;
-                case "SniperRPS_PWin":
+                case $"{TF2Plugin.PluginGUID}__SniperRPS_PWin":
                     targetAudioThing = _rps_sniper_winpaper;
                     break;
-                case "SniperRPS_SWin":
+                case $"{TF2Plugin.PluginGUID}__SniperRPS_SWin":
                     targetAudioThing = _rps_sniper_winscissors;
                     break;
 
 
-                case "SoldierRPS_Start":
+                case $"{TF2Plugin.PluginGUID}__SoldierRPS_Start":
                     targetAudioThing = _rps_soldier_initiate;
                     break;
-                case "SoldierRPS_RLose":
-                case "SoldierRPS_PLose":
-                case "SoldierRPS_SLose":
+                case $"{TF2Plugin.PluginGUID}__SoldierRPS_RLose":
+                case $"{TF2Plugin.PluginGUID}__SoldierRPS_PLose":
+                case $"{TF2Plugin.PluginGUID}__SoldierRPS_SLose":
                     targetAudioThing = _rps_soldier_loss;
                     break;
-                case "SoldierRPS_RWin":
+                case $"{TF2Plugin.PluginGUID}__SoldierRPS_RWin":
                     targetAudioThing = _rps_soldier_winrock;
                     break;
-                case "SoldierRPS_PWin":
+                case $"{TF2Plugin.PluginGUID}__SoldierRPS_PWin":
                     targetAudioThing = _rps_soldier_winpaper;
                     break;
-                case "SoldierRPS_SWin":
+                case $"{TF2Plugin.PluginGUID}__SoldierRPS_SWin":
                     targetAudioThing = _rps_soldier_winscissors;
                     break;
 
 
-                case "SpyRPS_Start":
+                case $"{TF2Plugin.PluginGUID}__SpyRPS_Start":
                     targetAudioThing = _rps_spy_initiate;
                     break;
-                case "SpyRPS_RLose":
+                case $"{TF2Plugin.PluginGUID}__SpyRPS_RLose":
                     RandomSpyWindup(mapper);
                     targetAudioThing = _rps_spy_lossrock;
                     break;
-                case "SpyRPS_PLose":
+                case $"{TF2Plugin.PluginGUID}__SpyRPS_PLose":
                     RandomSpyWindup(mapper);
                     targetAudioThing = _rps_spy_losspaper;
                     break;
-                case "SpyRPS_SLose":
+                case $"{TF2Plugin.PluginGUID}__SpyRPS_SLose":
                     RandomSpyWindup(mapper);
                     targetAudioThing = _rps_spy_lossscissors;
                     break;
-                case "SpyRPS_RWin":
+                case $"{TF2Plugin.PluginGUID}__SpyRPS_RWin":
                     RandomSpyWindup(mapper);
                     targetAudioThing = _rps_spy_winrock;
                     break;
-                case "SpyRPS_PWin":
+                case $"{TF2Plugin.PluginGUID}__SpyRPS_PWin":
                     RandomSpyWindup(mapper);
                     targetAudioThing = _rps_spy_winpaper;
                     break;
-                case "SpyRPS_SWin":
+                case $"{TF2Plugin.PluginGUID}__SpyRPS_SWin":
                     RandomSpyWindup(mapper);
                     targetAudioThing = _rps_spy_winscissors;
                     break;
 
 
 
-                case "Demo_Conga":
+                case $"{TF2Plugin.PluginGUID}__Demo_Conga":
                     targetAudioThing2 = _conga_demo_start;
                     targetAudioThing = _conga_demo_loop;
                     break;
-                case "Engi_Conga":
+                case $"{TF2Plugin.PluginGUID}__Engi_Conga":
                     targetAudioThing2 = _conga_engi_start;
                     targetAudioThing = _conga_engi_loop;
                     break;
-                case "Heavy_Conga":
+                case $"{TF2Plugin.PluginGUID}__Heavy_Conga":
                     targetAudioThing2 = _conga_heavy_start;
                     targetAudioThing = _conga_heavy_loop;
                     break;
-                case "Medic_Conga":
+                case $"{TF2Plugin.PluginGUID}__Medic_Conga":
                     targetAudioThing2 = _conga_medic_start;
                     targetAudioThing = _conga_medic_loop;
                     break;
-                case "Pyro_Conga":
+                case $"{TF2Plugin.PluginGUID}__Pyro_Conga":
                     targetAudioThing2 = _conga_pyro_start;
                     targetAudioThing = _conga_pyro_loop;
                     break;
-                case "Scout_Conga":
+                case $"{TF2Plugin.PluginGUID}__Scout_Conga":
                     targetAudioThing2 = _conga_scout_start;
                     targetAudioThing = _conga_scout_loop;
                     break;
-                case "Sniper_Conga":
+                case $"{TF2Plugin.PluginGUID}__Sniper_Conga":
                     targetAudioThing2 = _conga_sniper_start;
                     targetAudioThing = _conga_sniper_loop;
                     break;
-                case "Soldier_Conga":
+                case $"{TF2Plugin.PluginGUID}__Soldier_Conga":
                     targetAudioThing2 = _conga_soldier_start;
                     targetAudioThing = _conga_soldier_loop;
                     break;
-                case "Spy_Conga":
+                case $"{TF2Plugin.PluginGUID}__Spy_Conga":
                     targetAudioThing2 = _conga_spy_start;
                     targetAudioThing = _conga_spy_loop;
                     break;
@@ -1108,7 +1123,6 @@ namespace TitanFall2Emotes
             if (targetAudioThing != -1)
             {
                 AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, targetAudioThing, mapper);
-                DebugClass.Log($"seggs");
             }
             if (targetAudioThing2 != -1)
             {
@@ -1157,63 +1171,73 @@ namespace TitanFall2Emotes
             //mapper.GetComponentInParent<CharacterModel>().body.healthComponent.Suicide();
         }
 
-        internal void AddAnimation(string AnimClip, string wwise, bool looping, bool dimAudio, bool sync, string customName)
+        internal void AddAnimation(string AnimClip, string wwise, bool looping, bool dimAudio, bool sync, string customName, bool usePrevAnimationForJoinAnimation)
         {
             //CustomEmotesAPI.AddCustomAnimation(, looping, $"Play_{wwise}", $"Stop_{wwise}", dimWhenClose: dimAudio, syncAnim: sync, syncAudio: sync);
-            AnimationClipParams clipParams = new AnimationClipParams
+            CustomEmoteParams clipParams = new CustomEmoteParams
             {
-                animationClip = [Assets.Load<AnimationClip>($"{AnimClip}.anim")],
-                looping = looping,
+                primaryAnimationClips = [Assets.Load<AnimationClip>($"{AnimClip}.anim")],
+                audioLoops = looping,
                 syncAnim = sync,
                 syncAudio = sync,
                 thirdPerson = true,
-                displayName = customName
+                displayName = customName,
+                preventMovement = true
             };
-            CustomEmotesAPI.AddCustomAnimation(clipParams);
-            string emote = AnimClip.Split('/')[AnimClip.Split('/').Length - 1];
-            BoneMapper.animClips[emote].vulnerableEmote = true;
-
+            if (usePrevAnimationForJoinAnimation)
+            {
+                clipParams.emoteToPlayOnJoin = prevAnimation;
+            }
+            EmoteImporter.ImportEmote(clipParams);
+            BoneMapper.animClips.Last().Value.vulnerableEmote = true;
         }
 
-        internal void AddAnimation(string AnimClip, AudioClip[] audioClip, string AnimClip2ElectricBoogaloo, bool dimAudio, bool sync, string customName)
+        internal void AddAnimation(string AnimClip, AudioClip[] audioClip, string AnimClip2ElectricBoogaloo, bool dimAudio, bool sync, string customName, bool usePrevAnimationForJoinAnimation)
         {
             //CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>($"@ExampleEmotePlugin_badassemotes:assets/{AnimClip}.anim"), true, $"Play_{wwise}", $"Stop_{wwise}", secondaryAnimation: , dimWhenClose: dimAudio, syncAnim: sync, syncAudio: sync);
-            AnimationClipParams clipParams = new AnimationClipParams
+            CustomEmoteParams clipParams = new CustomEmoteParams
             {
-                animationClip = [Assets.Load<AnimationClip>($"{AnimClip}.anim")],
-                secondaryAnimation = [Assets.Load<AnimationClip>($"{AnimClip2ElectricBoogaloo}.anim")],
-                looping = false,
+                primaryAnimationClips = [Assets.Load<AnimationClip>($"{AnimClip}.anim")],
+                secondaryAnimationClips = [Assets.Load<AnimationClip>($"{AnimClip2ElectricBoogaloo}.anim")],
+                audioLoops = false,
                 syncAnim = sync,
                 syncAudio = sync,
                 thirdPerson = true,
-                _primaryAudioClips = audioClip,
-                _primaryDMCAFreeAudioClips = audioClip,
-                displayName = customName
+                primaryAudioClips = audioClip,
+                primaryDMCAFreeAudioClips = audioClip,
+                displayName = customName,
+                preventMovement = true
             };
-            CustomEmotesAPI.AddCustomAnimation(clipParams);
-            string emote = AnimClip.Split('/')[AnimClip.Split('/').Length - 1];
-            BoneMapper.animClips[emote].vulnerableEmote = true;
+            if (usePrevAnimationForJoinAnimation)
+            {
+                clipParams.emoteToPlayOnJoin = prevAnimation;
+            }
+            EmoteImporter.ImportEmote(clipParams);
+            BoneMapper.animClips.Last().Value.vulnerableEmote = true;
         }
-        internal void AddAnimation(string AnimClip, string wwise, string AnimClip2ElectricBoogaloo, bool dimAudio, bool sync, bool visibility, string customName)
+        internal void AddAnimation(string AnimClip, string wwise, string AnimClip2ElectricBoogaloo, bool dimAudio, bool sync, bool visibility, string customName, bool usePrevAnimationForJoinAnimation)
         {
             //CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>($"@ExampleEmotePlugin_badassemotes:assets/{AnimClip}.anim"), true, $"Play_{wwise}", $"Stop_{wwise}", secondaryAnimation: Assets.Load<AnimationClip>($"@ExampleEmotePlugin_badassemotes:assets/{AnimClip2ElectricBoogaloo}.anim"), dimWhenClose: dimAudio, syncAnim: sync, syncAudio: sync, visible: visibility);
-            AnimationClipParams clipParams = new AnimationClipParams
+            CustomEmoteParams clipParams = new CustomEmoteParams
             {
-                animationClip = [Assets.Load<AnimationClip>($"{AnimClip}.anim")],
-                secondaryAnimation = [Assets.Load<AnimationClip>($"{AnimClip2ElectricBoogaloo}.anim")],
-                looping = true,
+                primaryAnimationClips = [Assets.Load<AnimationClip>($"{AnimClip}.anim")],
+                secondaryAnimationClips = [Assets.Load<AnimationClip>($"{AnimClip2ElectricBoogaloo}.anim")],
+                audioLoops = true,
                 syncAnim = sync,
                 syncAudio = sync,
                 visible = visibility,
                 thirdPerson = true,
-                displayName = customName
+                displayName = customName,
+                preventMovement = true
             };
-            CustomEmotesAPI.AddCustomAnimation(clipParams);
-            string emote = AnimClip.Split('/')[AnimClip.Split('/').Length - 1];
-            BoneMapper.animClips[emote].vulnerableEmote = true;
-
+            if (usePrevAnimationForJoinAnimation)
+            {
+                clipParams.emoteToPlayOnJoin = prevAnimation;
+            }
+            EmoteImporter.ImportEmote(clipParams);
+            BoneMapper.animClips.Last().Value.vulnerableEmote = true;
         }
-        internal string AddHiddenAnimation(string[] AnimClip, string[] AnimClip2ElectricBoogaloo, JoinSpot[] joinSpots, string customName)
+        internal string AddHiddenAnimation(string[] AnimClip, string[] AnimClip2ElectricBoogaloo, JoinSpot[] joinSpots, string customName, bool usePrevAnimationForJoinAnimation)
         {
             List<AnimationClip> primary = new List<AnimationClip>();
             foreach (var item in AnimClip)
@@ -1225,91 +1249,110 @@ namespace TitanFall2Emotes
             {
                 secondary.Add(Assets.Load<AnimationClip>($"@ExampleEmotePlugin_badassemotes:assets/{item}.anim"));
             }
-            string emote = AnimClip[0].Split('/')[AnimClip[0].Split('/').Length - 1]; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
             //CustomEmotesAPI.AddCustomAnimation(primary.ToArray(), true, wwise, stopwwise.ToArray(), secondaryAnimation: secondary.ToArray(), joinSpots: joinSpots, visible: false);
-            AnimationClipParams clipParams = new AnimationClipParams
+            CustomEmoteParams clipParams = new CustomEmoteParams
             {
-                animationClip = primary.ToArray(),
-                secondaryAnimation = secondary.ToArray(),
-                looping = true,
+                primaryAnimationClips = primary.ToArray(),
+                secondaryAnimationClips = secondary.ToArray(),
+                audioLoops = true,
                 joinSpots = joinSpots,
                 visible = false,
                 thirdPerson = true,
-                displayName = customName
+                displayName = customName,
+                preventMovement = true
             };
-            CustomEmotesAPI.AddCustomAnimation(clipParams);
-            BoneMapper.animClips[emote].vulnerableEmote = true;
+            if (usePrevAnimationForJoinAnimation)
+            {
+                clipParams.emoteToPlayOnJoin = prevAnimation;
+            }
+            EmoteImporter.ImportEmote(clipParams);
+            string emote = BoneMapper.animClips.Last().Key; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
+            BoneMapper.animClips.Last().Value.vulnerableEmote = true;
             return emote;
         }
-        internal string AddHiddenAnimation(string[] AnimClip, string customName)
+        internal string AddHiddenAnimation(string[] AnimClip, string customName, bool usePrevAnimationForJoinAnimation)
         {
             List<AnimationClip> primary = new List<AnimationClip>();
             foreach (var item in AnimClip)
             {
                 primary.Add(Assets.Load<AnimationClip>($"@ExampleEmotePlugin_badassemotes:assets/{item}.anim"));
             }
-            string emote = AnimClip[0].Split('/')[AnimClip[0].Split('/').Length - 1]; ;
             //CustomEmotesAPI.AddCustomAnimation(primary.ToArray(), false, wwise, stopwwise.ToArray(), visible: false);
-            AnimationClipParams clipParams = new AnimationClipParams
+            CustomEmoteParams clipParams = new CustomEmoteParams
             {
-                animationClip = primary.ToArray(),
-                looping = false,
+                primaryAnimationClips = primary.ToArray(),
+                audioLoops = false,
                 visible = false,
                 thirdPerson = true,
-                displayName = customName
+                displayName = customName,
+                preventMovement = true
             };
-            CustomEmotesAPI.AddCustomAnimation(clipParams);
-            BoneMapper.animClips[emote].vulnerableEmote = true;
+            if (usePrevAnimationForJoinAnimation)
+            {
+                clipParams.emoteToPlayOnJoin = prevAnimation;
+            }
+            EmoteImporter.ImportEmote(clipParams);
+            string emote = BoneMapper.animClips.Last().Key;
+            BoneMapper.animClips.Last().Value.vulnerableEmote = true;
             return emote;
         }
-        internal string AddHiddenAnimation(string[] AnimClip, AudioClip[] audioClips, string customName)
+        internal string AddHiddenAnimation(string[] AnimClip, AudioClip[] audioClips, string customName, bool usePrevAnimationForJoinAnimation)
         {
             List<AnimationClip> primary = new List<AnimationClip>();
             foreach (var item in AnimClip)
             {
                 primary.Add(Assets.Load<AnimationClip>($"@ExampleEmotePlugin_badassemotes:assets/{item}.anim"));
             }
-            string emote = AnimClip[0].Split('/')[AnimClip[0].Split('/').Length - 1]; ;
             //CustomEmotesAPI.AddCustomAnimation(primary.ToArray(), false, wwise, stopwwise.ToArray(), visible: false);
-            AnimationClipParams clipParams = new AnimationClipParams
+            CustomEmoteParams clipParams = new CustomEmoteParams
             {
-                animationClip = primary.ToArray(),
-                looping = false,
+                primaryAnimationClips = primary.ToArray(),
+                audioLoops = false,
                 visible = false,
                 thirdPerson = true,
-                _primaryAudioClips = audioClips,
-                _primaryDMCAFreeAudioClips = audioClips,
-                displayName = customName
+                primaryAudioClips = audioClips,
+                primaryDMCAFreeAudioClips = audioClips,
+                displayName = customName,
+                preventMovement = true
             };
-            CustomEmotesAPI.AddCustomAnimation(clipParams);
-            BoneMapper.animClips[emote].vulnerableEmote = true;
+            if (usePrevAnimationForJoinAnimation)
+            {
+                clipParams.emoteToPlayOnJoin = prevAnimation;
+            }
+            EmoteImporter.ImportEmote(clipParams);
+            string emote = BoneMapper.animClips.Last().Key;
+            BoneMapper.animClips.Last().Value.vulnerableEmote = true;
             return emote;
         }
-        internal string AddHiddenAnimation(string[] AnimClip, AudioClip[] audioClips, bool sync, string customName)
+        internal string AddHiddenAnimation(string[] AnimClip, AudioClip[] audioClips, bool sync, string customName, bool usePrevAnimationForJoinAnimation)
         {
             List<AnimationClip> primary = new List<AnimationClip>();
             foreach (var item in AnimClip)
             {
                 primary.Add(Assets.Load<AnimationClip>($"@ExampleEmotePlugin_badassemotes:assets/{item}.anim"));
             }
-            string emote = AnimClip[0].Split('/')[AnimClip[0].Split('/').Length - 1]; ;
             //CustomEmotesAPI.AddCustomAnimation(primary.ToArray(), true, wwise, stopwwise.ToArray(), visible: false, syncAudio: sync);
-            AnimationClipParams clipParams = new AnimationClipParams
+            CustomEmoteParams clipParams = new CustomEmoteParams
             {
-                animationClip = [.. primary],
-                looping = true,
+                primaryAnimationClips = [.. primary],
+                audioLoops = true,
                 visible = false,
                 syncAudio = sync,
                 thirdPerson = true,
-                _primaryAudioClips = audioClips,
-                _primaryDMCAFreeAudioClips = audioClips,
+                primaryAudioClips = audioClips,
+                primaryDMCAFreeAudioClips = audioClips,
                 displayName = customName
             };
-            CustomEmotesAPI.AddCustomAnimation(clipParams);
-            BoneMapper.animClips[emote].vulnerableEmote = true;
+            if (usePrevAnimationForJoinAnimation)
+            {
+                clipParams.emoteToPlayOnJoin = prevAnimation;
+            }
+            EmoteImporter.ImportEmote(clipParams);
+            string emote = BoneMapper.animClips.Last().Key;
+            BoneMapper.animClips.Last().Value.vulnerableEmote = true;
             return emote;
         }
-        internal string AddHiddenAnimation(string[] AnimClip, AudioClip[] audioClips, bool sync, string[] AnimClip2, string customName)
+        internal string AddHiddenAnimation(string[] AnimClip, AudioClip[] audioClips, bool sync, string[] AnimClip2, string customName, bool usePrevAnimationForJoinAnimation)
         {
             List<AnimationClip> primary = new List<AnimationClip>();
             foreach (var item in AnimClip)
@@ -1321,23 +1364,27 @@ namespace TitanFall2Emotes
             {
                 secondary.Add(Assets.Load<AnimationClip>($"@ExampleEmotePlugin_badassemotes:assets/{item}.anim"));
             }
-            string emote = AnimClip[0].Split('/')[AnimClip[0].Split('/').Length - 1]; ;
             //CustomEmotesAPI.AddCustomAnimation(primary.ToArray(), false, wwise, stopwwise.ToArray(), visible: false, syncAudio: sync, secondaryAnimation: secondary.ToArray());
 
-            AnimationClipParams clipParams = new AnimationClipParams
+            CustomEmoteParams clipParams = new CustomEmoteParams
             {
-                animationClip = primary.ToArray(),
-                secondaryAnimation = secondary.ToArray(),
-                looping = true,
+                primaryAnimationClips = primary.ToArray(),
+                secondaryAnimationClips = secondary.ToArray(),
+                audioLoops = true,
                 visible = false,
                 syncAudio = sync,
                 thirdPerson = true,
-                _primaryAudioClips = audioClips,
-                _primaryDMCAFreeAudioClips = audioClips,
+                primaryAudioClips = audioClips,
+                primaryDMCAFreeAudioClips = audioClips,
                 displayName = customName
             };
-            CustomEmotesAPI.AddCustomAnimation(clipParams);
-            BoneMapper.animClips[emote].vulnerableEmote = true;
+            if (usePrevAnimationForJoinAnimation)
+            {
+                clipParams.emoteToPlayOnJoin = prevAnimation;
+            }
+            EmoteImporter.ImportEmote(clipParams);
+            string emote = BoneMapper.animClips.Last().Key;
+            BoneMapper.animClips.Last().Value.vulnerableEmote = true;
             return emote;
         }
     }

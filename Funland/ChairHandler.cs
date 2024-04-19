@@ -39,23 +39,20 @@ namespace TitanFall2Emotes
                     case 0:
                         mapper.preserveParent = true;
                         mapper.preserveProps = true;
-                        DebugClass.Log($"burp");
-                        mapper.PlayAnim("engiRanchoBurp", 0);
+                        mapper.PlayAnim($"{TF2Plugin.PluginGUID}__engiRanchoBurp", 0);
                         AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, TF2Plugin.Instance._play_ranchoburp, mapper);
                         break;
                     case 1:
                         mapper.preserveParent = true;
                         mapper.preserveProps = true;
-                        DebugClass.Log($"bigDrink");
-                        mapper.PlayAnim("engiRanchoBigDrink", 0);
+                        mapper.PlayAnim($"{TF2Plugin.PluginGUID}__engiRanchoBigDrink", 0);
                         AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, TF2Plugin.Instance._play_rancholong, mapper);
                         GetComponentInChildren<Animator>().SetBool("BigDrink", true);
                         break;
                     case 2:
                         mapper.preserveParent = true;
                         mapper.preserveProps = true;
-                        DebugClass.Log($"quickDrink");
-                        mapper.PlayAnim("engiRanchoQuickDrink", 0);
+                        mapper.PlayAnim($"{TF2Plugin.PluginGUID}__engiRanchoQuickDrink", 0);
                         AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, TF2Plugin.Instance._play_ranchoquick, mapper);
                         GetComponentInChildren<Animator>().SetBool("SmallDrink", true);
                         break;

@@ -15,17 +15,8 @@ namespace TitanFall2Emotes
             joinerMapper.PlayAnim(TF2Plugin.RPS_Start_Emotes[spot], 0);
             joinerMapper.props.Add(new GameObject());
             joinerMapper.props[0].AddComponent<RockPaperScissors>().charType = spot;
-
-            GameObject g = new GameObject();
-            g.name = "RPS_StartProp";
-            joinerMapper.props.Add(g);
-            g.transform.localPosition = joinerMapper.transform.position;
-            g.transform.localEulerAngles = joinerMapper.transform.eulerAngles;
-            g.transform.localScale = Vector3.one;
-            g.transform.SetParent(joinerMapper.mapperBodyTransform.parent);
-            joinerMapper.AssignParentGameObject(g, true, true, false, false, false);
         }
-        public static void RPSWin(BoneMapper joinerMapper, int spot, BoneMapper hostJoinerMapper, bool joinerPlayer, bool hostPlayer)
+        public static void RPSWin(BoneMapper joinerMapper, int spot, BoneMapper hostJoinerMapper, bool joinerIsEnemy)
         {
             joinerMapper.PlayAnim(TF2Plugin.RPS_Win_Emotes[spot], 0);
 
@@ -52,10 +43,11 @@ namespace TitanFall2Emotes
             }
 
             string Team = "Red";
-            if (joinerPlayer != hostPlayer)
+            if (joinerIsEnemy)
             {
                 Team = "Blu";
-                TF2Plugin.Instance.KillAfterSecondsNotIEnumerator(hostJoinerMapper, 6.5f);
+                //TODO Lore accurate
+                //TF2Plugin.Instance.KillAfterSecondsNotIEnumerator(hostJoinerMapper, 6.5f);
             }
             //0 rock
             //1 paper
@@ -80,7 +72,7 @@ namespace TitanFall2Emotes
             joinerMapper.props[prop1].transform.localPosition = new Vector3(0, 2.5f * joinerMapper.props[prop1].transform.lossyScale.y, 0);
             joinerMapper.ScaleProps();
         }
-        public static void RPSLose(BoneMapper joinerMapper, int spot, BoneMapper hostJoinerMapper, bool joinerPlayer, bool hostPlayer)
+        public static void RPSLose(BoneMapper joinerMapper, int spot, BoneMapper hostJoinerMapper, bool joinerIsEnemy, bool hostAndJoinerAreDifferentTeams)
         {
             joinerMapper.PlayAnim(TF2Plugin.RPS_Loss_Emotes[spot], 0);
 
@@ -107,10 +99,14 @@ namespace TitanFall2Emotes
             }
 
             string Team2 = "Red";
-            if (joinerPlayer != hostPlayer)
+            if (joinerIsEnemy)
             {
                 Team2 = "Blu";
-                TF2Plugin.Instance.KillAfterSecondsNotIEnumerator(joinerMapper, 6.5f);
+            }
+            if (hostAndJoinerAreDifferentTeams)
+            {
+                //TODO lore accurate
+                //TF2Plugin.Instance.KillAfterSecondsNotIEnumerator(joinerMapper, 6.5f);
             }
             //0 rock
             //1 paper
