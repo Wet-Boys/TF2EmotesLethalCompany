@@ -26,7 +26,7 @@ namespace TitanFall2Emotes
         public const string PluginGUID = "com.weliveinasociety.teamfortress2emotes";
         public const string PluginAuthor = "Nunchuk";
         public const string PluginName = "TF2Emotes";
-        public const string PluginVersion = "1.0.7";
+        public const string PluginVersion = "1.0.9";
         internal static List<string> Conga_Emotes = new List<string>();
         internal static List<string> KazotskyKick_Emotes = new List<string>();
         internal static List<string> RPS_Start_Emotes = new List<string>();
@@ -721,10 +721,6 @@ namespace TitanFall2Emotes
         }
         private void CustomEmotesAPI_animChanged(string newAnimation, BoneMapper mapper)
         {
-            if (!mapper.gameObject.GetComponent<TF2EmoteTracker>())
-            {
-                mapper.gameObject.AddComponent<TF2EmoteTracker>();
-            }
             int targetAudioThing = -1;
             int targetAudioThing2 = -1;
             StopAudioContainerStuff(mapper);
@@ -772,21 +768,18 @@ namespace TitanFall2Emotes
                 case "Conga":
                     if (mapper.local || mapper.isEnemy)
                     {
-                        mapper.gameObject.GetComponent<TF2EmoteTracker>().currentAnimation = "Medic_Conga";
                         TF2Networker.instance.SyncEmoteToServerRpc(mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId, "Conga_Start", GetMercNumber(), mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId);
                     }
                     break;
                 case "Kazotsky Kick":
                     if (mapper.local || mapper.isEnemy)
                     {
-                        mapper.gameObject.GetComponent<TF2EmoteTracker>().currentAnimation = "Medic_Kazotsky";
                         TF2Networker.instance.SyncEmoteToServerRpc(mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId, "Kazotsky_Start", GetMercNumber(), mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId);
                     }
                     break;
                 case "Schadenfreude":
                     if (mapper.local || mapper.isEnemy)
                     {
-                        mapper.gameObject.GetComponent<TF2EmoteTracker>().currentAnimation = "Medic_Laugh";
                         TF2Networker.instance.SyncEmoteToServerRpc(mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId, "Laugh_Start", GetMercNumber(), mapper.mapperBody.GetComponent<NetworkObject>().NetworkObjectId);
                     }
                     break;
@@ -1128,7 +1121,6 @@ namespace TitanFall2Emotes
             {
                 AudioContainerHolder.instance.PlayAudio(mapper.personalAudioSource, targetAudioThing2, mapper);
             }
-            mapper.gameObject.GetComponent<TF2EmoteTracker>().currentAnimation = newAnimation;
         }
         internal void RandomSpyWindup(BoneMapper mapper)
         {

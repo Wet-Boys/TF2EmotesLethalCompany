@@ -1,6 +1,5 @@
-﻿using BepInEx.Configuration;
-using LethalConfig;
-using LethalConfig.ConfigItems;
+﻿using BepInEx.Bootstrap;
+using BepInEx.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,7 +22,10 @@ namespace TitanFall2Emotes
         internal static void RunAll()
         {
             SetupConfig();
-            SetupLethalConfig();
+            if (Chainloader.PluginInfos.ContainsKey("ainavt.lc.lethalconfig"))
+            {
+                LethalConfig.SetupLethalConfig();
+            }
             LoadSettings();
         }
         private static void SetupConfig()
@@ -54,22 +56,7 @@ namespace TitanFall2Emotes
             LoadSettings();
         }
 
-        private static void SetupLethalConfig()
-        {
-            var aVeryCoolIconAsset = Assets.Load<Sprite>("lethalconfigicon.png");
-            LethalConfigManager.SetModIcon(aVeryCoolIconAsset);
-            LethalConfigManager.SetModDescription("Are those Latin rhythms? I love Latin rhythms!");
-            LethalConfigManager.AddConfigItem(new BoolCheckBoxConfigItem(scout, false));
-            LethalConfigManager.AddConfigItem(new BoolCheckBoxConfigItem(soldier, false));
-            LethalConfigManager.AddConfigItem(new BoolCheckBoxConfigItem(pyro, false));
-            LethalConfigManager.AddConfigItem(new BoolCheckBoxConfigItem(demo, false));
-            LethalConfigManager.AddConfigItem(new BoolCheckBoxConfigItem(heavy, false));
-            LethalConfigManager.AddConfigItem(new BoolCheckBoxConfigItem(engi, false));
-            LethalConfigManager.AddConfigItem(new BoolCheckBoxConfigItem(medic, false));
-            LethalConfigManager.AddConfigItem(new BoolCheckBoxConfigItem(sniper, false));
-            LethalConfigManager.AddConfigItem(new BoolCheckBoxConfigItem(spy, false));
 
-        }
 
         internal static void LoadSettings()
         {
